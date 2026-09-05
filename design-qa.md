@@ -67,3 +67,39 @@ Snowflake login is still required. SQL schema, bound SQL API adapter, shared-ans
 This supersedes the Snowflake blockers above. An active account now hosts PASSITON, two demo tables and PASSITON_WH (X-Small, 60-second auto-suspend). With explicit user approval, a dedicated 30-day key-pair service user received only the app role, and its private key was saved as a sensitive production environment variable in Vercel.
 
 Deployment `openhand-4fpmuwn74-himanshus-projects-acd54afd.vercel.app` passed live SQL API authentication as PASSITON_SERVICE/PASSITON_APP. An anonymous fresh-session request persisted; replaying it counted once. An existing signed, source-checked demo review synced twice without duplicate answers, loaded through the shared library and reduced the question's unmet demand to zero. SQL statement handles and results are recorded in `docs/snowflake-live-verification.json`. The deployment was promoted to the existing public site. Actual microphone capture remains unverified; the earlier Gemini, ElevenLabs generated-audio round-trip and finalized Solana devnet evidence are unchanged.
+
+## Wallet-free usability audit, 5 September 2026
+
+Question put to this pass: can a stranger use this without Solana, given there is no real money? Verdict: yes for the knowledge loop, which is now proven end to end against production providers. The wallet is needed only for the optional devnet bounty.
+
+### Verified against live production, not mocks
+
+Run against https://openhand-eta.vercel.app with its existing configured credentials. Each step below is an observed result, not a local stub.
+
+- Live Gemini rejected the seeded incorrect example, naming both planted faults: that students awaiting results *can* apply with a latest marksheet, and that the deadline is 30 September 2026, not 15 October 2026. Follow-up returned in Hindi.
+- Live Gemini passed the corrected contribution and produced two source-linked claims.
+- The demo review gate held: approve stayed disabled until both acknowledgements, then approved.
+- Live Snowflake persisted question, check and review events. Notices read "Saved to Snowflake."
+- A separate session with cleared storage retrieved the approved answer from Snowflake through `/knowledge/provisional/hi`, signature-verified, statement handle `01c6df0f-0002-9187-0`.
+- Live ElevenLabs spoke the reviewed Hindi answer, 12 seconds, fully buffered.
+
+No wallet was connected at any point in the above. No payment was prepared or sent.
+
+Local checks used no credentials and are labelled as such: the local server has no provider keys, so every check there fails closed with "Gemini is not configured."
+
+### Bugs found and fixed
+
+1. A reviewed answer already published for the current question and language was reported as "Awaiting a contribution". The status line ignored the shared library entirely.
+2. A first-time visitor landed on Contribute, so answers that had been checked, reviewed and published were invisible on arrival. First visits now open on Questions.
+3. The stage was never persisted, so refreshing mid-review dropped the visitor back to Contribute. `setMode` now saves, and the stage is restored on re-entry.
+4. After approval the only forward action was the bounty, implying the contribution was unfinished without a wallet. The workspace now states where the answer went and marks the devnet bounty optional.
+
+Regression coverage added in `test/workspace-entry.test.js` over the extracted pure decisions in `public/passiton/labels.js`. 30 tests pass; `npm run check` passes.
+
+One suspected bug was investigated and dismissed: an answer still shown after switching to English was correct, because a reviewed English answer genuinely existed.
+
+### Not verified
+
+Actual microphone capture. It needs a permission grant on a real device and was not exercised, so the recorded-interview path remains unproven end to end. Transcription is configured and the TTS half of the loop is verified.
+
+Proof expiry after seven days was not observed in real time. It is covered by existing tamper and expiry tests only.
