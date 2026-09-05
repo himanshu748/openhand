@@ -258,3 +258,96 @@ pre {
 
 audio { width: 100%; margin-top: 16px; height: 38px; }
 audio::-webkit-media-controls-panel { background: var(--bg-sink); }
+
+/* ---------- skeletons ----------
+   Shaped like the content they replace, so nothing reflows on arrival. */
+.sk { position: relative; overflow: hidden; background: #161b20; border-radius: 6px; }
+.sk::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.045), transparent);
+  animation: sweep 1.4s var(--ease) infinite;
+}
+@keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .sk::after { animation: none; } }
+.sk-line { height: 11px; margin: 9px 0; }
+.sk-num { height: 34px; width: 62%; }
+
+/* ---------- trace ----------
+   The core interaction. A figure opens into the rows that produce it, and the
+   rows are summed in front of the reader so the total can be checked. */
+.traceable {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: none; border: 0; padding: 0; margin: 0;
+  font: inherit; color: inherit; cursor: pointer; text-align: left;
+}
+.traceable .chev {
+  width: 20px; height: 20px; flex: none; border-radius: 999px;
+  border: 1px solid var(--line); display: grid; place-items: center;
+  font-size: 10px; color: var(--ink-3);
+  transition: transform 0.3s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.traceable:hover .chev { border-color: var(--accent); color: var(--accent); }
+.traceable[aria-expanded='true'] .chev { transform: rotate(90deg); border-color: var(--accent); color: var(--accent); }
+.traceable:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+
+.trace {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows 0.42s var(--ease);
+}
+.trace[data-open='true'] { grid-template-rows: 1fr; }
+.trace > div { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .trace { transition: none; } }
+
+.trace-inner { padding-top: 18px; margin-top: 18px; border-top: 1px dashed var(--line); }
+.trace-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 12px;
+  padding: 7px 0; font-size: 13px; align-items: baseline;
+}
+.trace-row + .trace-row { border-top: 1px solid var(--line-soft); }
+.trace-sum {
+  display: grid; grid-template-columns: 1fr auto; gap: 12px;
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line);
+  font-size: 13px; font-weight: 600;
+}
+.trace-check { font-size: 12px; margin-top: 10px; color: var(--accent); }
+.trace-check.bad { color: var(--out); }
+
+/* ---------- ledger controls ---------- */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  height: 30px; padding: 0 13px; border-radius: 999px;
+  border: 1px solid var(--line); background: transparent; color: var(--ink-2);
+  font: inherit; font-size: 13px; cursor: pointer;
+  transition: border-color 0.16s var(--ease), color 0.16s var(--ease), background 0.16s var(--ease);
+}
+.chip:hover { color: var(--ink); border-color: #2c343c; }
+.chip[aria-pressed='true'] { background: var(--accent-dk); border-color: #1d4536; color: var(--accent); }
+.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ledger tr.expandable { cursor: pointer; }
+.ledger tr.expandable:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.detail td { padding: 0 12px 0 0; border-top: 0; }
+.detail-inner {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px; padding: 16px 0 20px;
+}
+.detail-k { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3); }
+.detail-v { font-size: 13px; margin-top: 5px; word-break: break-all; }
+
+.copy {
+  border: 0; background: none; padding: 0; margin-left: 8px; cursor: pointer;
+  color: var(--ink-3); font: inherit; font-size: 12px; border-bottom: 1px solid var(--line);
+}
+.copy:hover { color: var(--accent); border-color: var(--accent); }
+
+.empty { padding: 34px 0; text-align: center; }
+.empty-title { font-size: 15px; font-weight: 600; }
+.empty-body { font-size: 13.5px; color: var(--ink-3); margin-top: 7px; }
+
+/* ---------- skip link ---------- */
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 60;
+  background: var(--accent); color: #04140d; padding: 11px 18px;
+  border-radius: 0 0 var(--r-control) 0; font-size: 14px; font-weight: 600;
+}
+.skip:focus { left: 0; }

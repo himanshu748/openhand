@@ -33,6 +33,22 @@ new IntersectionObserver(([e]) => nav.classList.toggle('stuck', !e.isIntersectin
 // bug rather than as a small number.
 const amount = (n) => (n > 0 && n < 0.0001 ? n.toFixed(6) : n.toFixed(4));
 
+// Write the real value first. requestAnimationFrame is throttled in a background
+// tab, so an animation that never starts must still leave the correct number.
+function countTo(el, target, format) {
+  el.textContent = format(target);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
+  const dur = 780;
+  const start = performance.now();
+  const step = (now) => {
+    const t = Math.min(1, (now - start) / dur);
+    el.textContent = format(target * (1 - Math.pow(1 - t, 3)));
+    if (t < 1) requestAnimationFrame(step);
+    else el.textContent = format(target);
+  };
+  requestAnimationFrame(step);
+}
+
 const ago = (ms) => {
   const s = Math.round(ms / 1000);
   if (s < 5) return 'just now';
@@ -60,7 +76,7 @@ async function readCause(tries = 4) {
     const d = await readCause();
     if (d.error) throw new Error(d.error);
 
-    document.getElementById('heroBalance').textContent = `${d.balanceSol.toFixed(3)} SOL`;
+    countTo(document.getElementById('heroBalance'), d.balanceSol, (v) => `${v.toFixed(3)} SOL`);
     // Say how old the read is. A cached number presented as a live one would
     // undercut the whole point of the page.
     badge.textContent = `read ${ago(d.ageMs || 0)}`;

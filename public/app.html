@@ -4,9 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Winter Coats, Ward 4</title>
+<meta name="description" content="A live giving ledger read from Solana devnet. Open any figure to see the transactions behind it." />
 <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
+
+<a href="#ledger-section" class="skip">Skip to the ledger</a>
 
 <nav class="nav stuck">
   <div class="shell">
@@ -20,41 +23,73 @@
 
   <header style="max-width:62ch">
     <h1 style="font-size:clamp(30px,4vw,44px)" id="title">Winter Coats, Ward 4</h1>
-    <p class="lede" style="margin-top:16px" id="purpose">Reading the cause from chain.</p>
+    <p class="lede" style="margin-top:16px" id="purpose">
+      <span class="sk sk-line" style="display:block;width:88%"></span>
+      <span class="sk sk-line" style="display:block;width:54%"></span>
+    </p>
     <p class="small" style="margin-top:14px" id="walletLine"></p>
   </header>
 
+  <!-- Every figure below opens into the rows that produce it, and the rows are
+       summed in front of the reader. A number nobody can check is the thing
+       this project exists to replace. -->
   <div class="stat-row" style="margin-top:40px">
     <div class="card pad">
       <div class="stat-lab">Held on chain now</div>
-      <div class="stat-num mono tnum" id="balance">0.000</div>
+      <div class="stat-num mono tnum" id="balance"><span class="sk sk-num" style="display:block"></span></div>
       <div class="meter"><i id="bar" style="width:0"></i></div>
       <div class="small" style="margin-top:12px" id="goalNote"></div>
     </div>
+
     <div class="card pad">
       <div class="stat-lab">Paid out</div>
-      <div class="stat-num mono tnum" id="pct">0%</div>
+      <button class="traceable" id="tracePaid" aria-expanded="false" aria-controls="tracePaidPanel">
+        <span class="stat-num mono tnum" id="pct">&nbsp;</span>
+        <span class="chev" aria-hidden="true">&rsaquo;</span>
+      </button>
       <div class="small" style="margin-top:12px" id="disbursedNote"></div>
+      <div class="trace" id="tracePaidPanel" data-open="false"><div><div class="trace-inner" id="tracePaidBody"></div></div></div>
     </div>
+
     <div class="card pad">
-      <div class="stat-lab">Still unspent</div>
-      <div class="stat-num mono tnum" id="unspent">0</div>
+      <div class="stat-lab">Donations received</div>
+      <button class="traceable" id="traceUnspent" aria-expanded="false" aria-controls="traceUnspentPanel">
+        <span class="stat-num mono tnum" id="unspent">&nbsp;</span>
+        <span class="chev" aria-hidden="true">&rsaquo;</span>
+      </button>
       <div class="small" style="margin-top:12px" id="idleNote"></div>
+      <div class="trace" id="traceUnspentPanel" data-open="false"><div><div class="trace-inner" id="traceUnspentBody"></div></div></div>
     </div>
   </div>
 
-  <h2 style="font-size:22px;margin-top:56px">The ledger</h2>
-  <p class="small" style="margin-top:8px">Every row links to its transaction. Nothing here is entered by hand.</p>
-  <div class="card" style="margin-top:18px;padding:22px 26px 8px">
-    <table class="ledger">
-      <thead>
-        <tr><th>Flow</th><th>Amount</th><th>When</th><th>Recorded purpose</th><th>Proof</th></tr>
-      </thead>
-      <tbody id="ledger">
-        <tr><td colspan="5" class="muted">Reading the chain.</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <section id="ledger-section" style="padding:56px 0 0">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap">
+      <div>
+        <h2 style="font-size:22px">The ledger</h2>
+        <p class="small" style="margin-top:8px">Select a row to open it. Nothing here is entered by hand.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filter the ledger">
+        <button class="chip" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" data-filter="donation" aria-pressed="false">Money in</button>
+        <button class="chip" data-filter="payout" aria-pressed="false">Money out</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;padding:22px 26px 8px">
+      <table class="ledger">
+        <thead>
+          <tr><th>Flow</th><th>Amount</th><th>When</th><th>Recorded purpose</th><th>Proof</th></tr>
+        </thead>
+        <tbody id="ledger">
+          <tr><td colspan="5" style="border-top:1px solid var(--line-soft)">
+            <span class="sk sk-line" style="display:block;width:100%"></span>
+            <span class="sk sk-line" style="display:block;width:92%"></span>
+            <span class="sk sk-line" style="display:block;width:96%"></span>
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
   <div class="app-split" style="margin-top:56px">
     <section style="padding:0">

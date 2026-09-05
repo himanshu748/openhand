@@ -41,7 +41,7 @@
       <div class="pad" style="padding-bottom:18px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
         <div>
           <div class="stat-lab" style="margin-bottom:9px">Held on chain now</div>
-          <div class="stat-num mono tnum" id="heroBalance">0.000</div>
+          <div class="stat-num mono tnum" id="heroBalance"><span class="sk sk-num" style="display:block;width:150px"></span></div>
         </div>
         <span class="badge live" id="heroBadge">reading devnet</span>
       </div>
@@ -49,7 +49,11 @@
         <table class="ledger">
           <thead><tr><th>Flow</th><th>Amount</th><th>Proof</th></tr></thead>
           <tbody id="heroRows">
-            <tr><td colspan="3" class="muted" style="border-top:1px solid var(--line-soft)">Contacting the network.</td></tr>
+            <tr><td colspan="3" style="border-top:1px solid var(--line-soft)">
+              <span class="sk sk-line" style="display:block"></span>
+              <span class="sk sk-line" style="display:block;width:88%"></span>
+              <span class="sk sk-line" style="display:block;width:94%"></span>
+            </td></tr>
           </tbody>
         </table>
       </div>
