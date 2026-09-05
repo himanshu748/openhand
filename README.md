@@ -1,6 +1,8 @@
 # Pass It On
 
-**Help once. Help the next hundred.** A working generosity demo: ask a question, contribute an explanation by voice, correct it against a source, review it as a person, and fund the accepted contribution with a Solana devnet bounty.
+Pass It On lets a volunteer leave an explanation that the next person can read or hear. Contribute by text or voice, correct the answer against a source, try the demo reviewer role, and share the approved answer through Snowflake. The knowledge flow works without a wallet; a sponsor can optionally fund a fixed Solana devnet bounty.
+
+[Try the app](https://openhand-eta.vercel.app/app) · [DEV submission draft](docs/dev-submission.md) · [90-second demo script](docs/demo-script.md) · [Readiness and remaining gaps](docs/challenge-readiness.md)
 
 This replaces Openhand’s original donation-ledger front page. The earlier ledger is still available at `/ledger`; its implementation history is in [docs/ledger-history.md](docs/ledger-history.md).
 
