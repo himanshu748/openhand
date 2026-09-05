@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Openhand</title>
+<meta name="description" content="A giving ledger where every number has a transaction behind it. Donate, and check the proof yourself." />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="shell">
+    <a class="brand" href="/"><span class="brand-mark"></span> Openhand</a>
+    <div class="nav-links">
+      <a href="#problem">Why</a>
+      <a href="#how">How it works</a>
+      <a href="#cause">The cause</a>
+    </div>
+    <a class="btn btn-sm btn-primary" href="/app" style="margin-left:22px">Open the ledger</a>
+  </div>
+</nav>
+
+<!-- HERO: asymmetric split. The right column is the real product reading live
+     devnet, not a mock built out of divs. -->
+<section style="padding-top:clamp(44px,6vw,80px)">
+  <div class="shell hero-grid">
+    <div>
+      <h1>Giving that<br />survives a check.</h1>
+      <p class="lede" style="margin-top:22px">
+        Every figure here is read from a public blockchain, not typed into a database.
+        Click any row and verify it yourself.
+      </p>
+      <div style="display:flex;gap:12px;margin-top:32px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="/app">Open the ledger</a>
+        <a class="btn" href="#how">How it works</a>
+      </div>
+    </div>
+
+    <div class="card" style="overflow:hidden">
+      <div class="pad" style="padding-bottom:18px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+        <div>
+          <div class="stat-lab" style="margin-bottom:9px">Held on chain now</div>
+          <div class="stat-num mono tnum" id="heroBalance">0.000</div>
+        </div>
+        <span class="badge live" id="heroBadge">reading devnet</span>
+      </div>
+      <div style="padding:0 26px 22px">
+        <table class="ledger">
+          <thead><tr><th>Flow</th><th>Amount</th><th>Proof</th></tr></thead>
+          <tbody id="heroRows">
+            <tr><td colspan="3" class="muted" style="border-top:1px solid var(--line-soft)">Contacting the network.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Logo wall sits under the hero. Logos only, no category labels. -->
+<div class="shell">
+  <div class="logowall">
+    <img src="https://cdn.simpleicons.org/solana/8b96a1" alt="Solana" style="height:19px;width:auto" />
+    <img src="https://cdn.simpleicons.org/snowflake/8b96a1" alt="Snowflake" style="height:22px;width:auto" />
+    <img src="https://cdn.simpleicons.org/googlegemini/8b96a1" alt="Google Gemini" style="height:21px;width:auto" />
+    <img src="https://cdn.simpleicons.org/elevenlabs/8b96a1" alt="ElevenLabs" style="height:18px;width:auto" />
+  </div>
+</div>
+
+<!-- Editorial statement paired with the same claim from two sources. -->
+<section id="problem" class="rule">
+  <div class="shell problem-grid">
+    <div class="rv">
+      <h2>A screenshot is not a receipt.</h2>
+      <p class="body" style="margin-top:20px">
+        Give to a coat drive, a medical fund, a mutual aid pot, and what comes back is a
+        total someone typed and a photo of a spreadsheet. You cannot tell whether the money
+        moved, when it moved, or whether it is still sitting there three weeks later.
+      </p>
+      <p class="body" style="margin-top:16px">
+        The people running these funds are not the problem. They have no way to prove they
+        are honest, so they ask you to assume it.
+      </p>
+    </div>
+    <!-- The same claim from two sources. The lower panel is live chain data,
+         so the contrast is real rather than illustrated. -->
+    <div class="rv" style="display:grid;gap:14px">
+      <div class="card pad" style="border-style:dashed">
+        <div class="stat-lab">What a fundraiser usually shows you</div>
+        <div class="stat-num mono tnum" style="color:var(--ink-3)">2.500 SOL</div>
+        <p class="small" style="margin-top:12px">A figure someone typed. Nothing to click.</p>
+      </div>
+      <div class="card pad">
+        <div class="stat-lab">What the chain says right now</div>
+        <div class="stat-num mono tnum" id="proofBalance" style="color:var(--accent)">reading</div>
+        <p class="small" style="margin-top:12px">
+          Signed, timestamped, and <a class="sig mono" id="proofLink" href="#" target="_blank" rel="noopener">open to inspection</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Full-bleed photograph with the cause copy over a scrim. The one human
+     moment on the page, placed before it turns technical. -->
+<section id="cause" class="rule" style="padding:0">
+  <figure class="cause-shot">
+    <img src="/img/coat-sort.jpg" width="1920" height="1071" fetchpriority="high"
+         alt="Volunteers sorting donated winter coats into boxes on folding tables in a community hall" />
+    <figcaption>
+      <h2>Winter Coats, Ward 4</h2>
+      <p class="lede" style="margin-top:16px;color:#cdd6dd">
+        Sixty insulated coats for children at the Ward 4 shelter, before the first cold week.
+        The wallet is public and every payout carries a recorded purpose.
+      </p>
+      <a class="btn btn-primary" href="/app" style="margin-top:26px">Open the ledger</a>
+    </figcaption>
+  </figure>
+</section>
+
+<!-- Asymmetric bento. Four cells, deliberately unequal weights. -->
+<section id="how" class="rule">
+  <div class="shell">
+    <div class="rv" style="max-width:60ch">
+      <p class="eyebrow">Four stages, four checks</p>
+      <h2 style="margin-top:14px">Each stage answers a question the last one cannot.</h2>
+    </div>
+
+    <div class="bento">
+      <div class="card pad rv cell" style="min-height:216px;background:linear-gradient(150deg,#13211a 0%,var(--bg-raise) 60%)">
+        <div>
+          <h3>Did the money actually move?</h3>
+          <p class="body" style="margin-top:12px;font-size:15px">
+            Donations and payouts are real transfers on Solana. The balance is asked of the
+            chain on every load and never stored here, so there is no figure for anyone to edit.
+          </p>
+        </div>
+        <div class="mono small" style="color:var(--accent)">Solana</div>
+      </div>
+
+      <div class="card pad rv cell" style="min-height:216px">
+        <div>
+          <h3>How long have they held it?</h3>
+          <p class="body" style="margin-top:12px;font-size:15px">
+            Chain events land in Snowflake, where seven accountability metrics are computed in
+            SQL: percent disbursed, median hours from gift to payout, donations still unspent.
+          </p>
+        </div>
+        <div class="mono small">Snowflake</div>
+      </div>
+
+      <div class="card pad rv cell" style="min-height:196px">
+        <div>
+          <h3>What does this row mean?</h3>
+          <p class="body" style="margin-top:12px;font-size:15px">
+            Gemini writes the donor update and must cite the signature behind every claim.
+            Any sentence without a matching transaction is dropped before you read it.
+          </p>
+        </div>
+        <div class="mono small">Google AI</div>
+      </div>
+
+      <div class="card pad rv cell" style="min-height:196px;background:linear-gradient(150deg,#1c1811 0%,var(--bg-raise) 60%)">
+        <div>
+          <h3>Will anyone actually read it?</h3>
+          <p class="body" style="margin-top:12px;font-size:15px">
+            The receipt is spoken by ElevenLabs and paced so each number lands on its own.
+            It is the part a donor keeps, which is what separates a trail from an update.
+          </p>
+        </div>
+        <div class="mono small" style="color:var(--out)">ElevenLabs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Single centred statement. A deliberately different layout family. -->
+<section class="rule" style="background:var(--bg-sink)">
+  <div class="shell" style="max-width:800px;text-align:center">
+    <h2 class="rv">The model is never trusted with a number.</h2>
+    <p class="lede rv" style="margin:20px auto 0">
+      Gemini returns claims, each tagged with a transaction signature. Openhand discards
+      every claim whose signature is not in the ledger, then tells you how many it threw away.
+      A fabricated payout cannot reach the page.
+    </p>
+    <div class="rv" style="margin-top:34px;display:inline-flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <span class="badge live">claim kept, signature found</span>
+      <span class="badge fb">claim discarded, no such transaction</span>
+    </div>
+  </div>
+</section>
+
+<section class="rule">
+  <div class="shell" style="display:flex;justify-content:space-between;align-items:center;gap:28px;flex-wrap:wrap">
+    <p class="rv" style="font-size:20px;letter-spacing:-0.02em;max-width:44ch">
+      Read the ledger before you give, not after.
+    </p>
+    <a class="btn btn-primary rv" href="/app">Open the ledger</a>
+  </div>
+</section>
+
+<footer class="rule" style="padding:32px 0 56px">
+  <div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <span class="small">Openhand runs on Solana devnet.</span>
+    <span class="small">Built for the DEV Weekend Challenge, Generosity Edition.</span>
+  </div>
+</footer>
+
+<script src="/landing.js"></script>
+</body>
+</html>

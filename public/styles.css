@@ -1,0 +1,260 @@
+/* Openhand design tokens.
+   Theme lock: dark only, one accent, one radius rule.
+   Radius rule: surfaces 16px, controls 10px, pills full. No exceptions.
+   Color rule: one accent (signal green). Amber appears only as the semantic
+   encoding for money leaving the wallet, never as decoration. */
+
+@font-face { font-family: 'InterVar'; src: local('SF Pro Display'), local('Inter'); }
+
+:root {
+  --bg:        #0a0c0e;
+  --bg-raise:  #111417;
+  --bg-sink:   #07090a;
+  --line:      #1e242a;
+  --line-soft: #171c21;
+
+  --ink:       #edf1f4;
+  --ink-2:     #a3aeb8;
+  --ink-3:     #6c7883;
+
+  --accent:    #4ade9b;
+  --accent-dk: #0f2b21;
+  --out:       #e0a45c;
+
+  --r-surface: 16px;
+  --r-control: 10px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --shell: 1180px;
+
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+.shell { max-width: var(--shell); margin: 0 auto; padding: 0 28px; }
+@media (max-width: 700px) { .shell { padding: 0 18px; } }
+
+.mono {
+  font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', Menlo, monospace;
+  font-feature-settings: 'tnum' 1;
+}
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ---------- type scale ---------- */
+h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.028em; line-height: 1.06; }
+h1 { font-size: clamp(38px, 5.4vw, 62px); }
+h2 { font-size: clamp(28px, 3.6vw, 40px); letter-spacing: -0.026em; line-height: 1.1; }
+h3 { font-size: 18px; letter-spacing: -0.012em; line-height: 1.3; }
+p  { margin: 0; }
+.lede { font-size: 18px; color: var(--ink-2); max-width: 56ch; }
+.body { font-size: 15.5px; color: var(--ink-2); max-width: 62ch; }
+.small { font-size: 13.5px; color: var(--ink-3); }
+
+.eyebrow {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--ink-3); font-weight: 500;
+}
+
+/* ---------- nav ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 40; height: 68px;
+  display: flex; align-items: center;
+  background: rgba(10, 12, 14, 0.82);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s var(--ease);
+}
+.nav.stuck { border-bottom-color: var(--line-soft); }
+.nav .shell { display: flex; align-items: center; gap: 30px; width: 100%; }
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 600; letter-spacing: -0.02em; font-size: 16.5px; }
+.brand-mark { width: 17px; height: 17px; border-radius: 999px; border: 2px solid var(--accent); position: relative; }
+.brand-mark::after { content: ''; position: absolute; inset: 3.5px; border-radius: 999px; background: var(--accent); }
+.nav-links { display: flex; gap: 26px; margin-left: auto; font-size: 14.5px; color: var(--ink-2); white-space: nowrap; }
+.nav-links a:hover { color: var(--ink); }
+@media (max-width: 780px) { .nav-links { display: none; } }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px; border-radius: var(--r-control);
+  font-size: 14.5px; font-weight: 550; white-space: nowrap;
+  border: 1px solid var(--line); background: var(--bg-raise); color: var(--ink);
+  cursor: pointer; font-family: inherit;
+  transition: transform 0.16s var(--ease), border-color 0.16s var(--ease), background 0.16s var(--ease);
+}
+.btn:hover { border-color: #2c343c; background: #161a1e; }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.45; cursor: default; transform: none; }
+.btn-primary { background: var(--accent); color: #04140d; border-color: transparent; font-weight: 600; }
+.btn-primary:hover { background: #62e7ab; border-color: transparent; }
+.btn-sm { height: 36px; padding: 0 14px; font-size: 13.5px; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- surfaces ---------- */
+.card {
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: var(--r-surface);
+}
+.pad { padding: 24px 26px; }
+
+/* ---------- sections ---------- */
+section { padding: clamp(56px, 7vw, 92px) 0; }
+.rule { border-top: 1px solid var(--line-soft); }
+
+/* ---------- reveal ----------
+   Content is visible by default. The hidden state is applied only once the
+   observer is confirmed working, so a failed or unsupported observer can never
+   leave the page blank. */
+.js-reveal .rv { opacity: 0; transform: translateY(18px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.js-reveal .rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .rv { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- ledger ---------- */
+.ledger { width: 100%; border-collapse: collapse; }
+.ledger th {
+  text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.13em;
+  color: var(--ink-3); font-weight: 500; padding: 0 12px 11px 0;
+}
+.ledger td { padding: 11px 12px 11px 0; border-top: 1px solid var(--line-soft); font-size: 14px; vertical-align: baseline; }
+.ledger tr:hover td { background: rgba(255,255,255,0.014); }
+.dir { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; }
+.dir.in  { color: var(--accent); }
+.dir.out { color: var(--out); }
+.sig { color: var(--ink-3); font-size: 12.5px; border-bottom: 1px solid var(--line); }
+.sig:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.muted { color: var(--ink-3); }
+
+/* ---------- stats ---------- */
+.stat-num { font-size: clamp(30px, 4vw, 40px); font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.stat-lab { font-size: 11px; text-transform: uppercase; letter-spacing: 0.13em; color: var(--ink-3); margin-bottom: 14px; }
+.meter { height: 5px; border-radius: 999px; background: #1a1f24; overflow: hidden; margin-top: 16px; }
+.meter > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.9s var(--ease); }
+
+/* ---------- badges ---------- */
+.badge {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 9px;
+  border-radius: 999px; font-size: 10.5px; text-transform: uppercase;
+  letter-spacing: 0.1em; font-weight: 600; border: 1px solid var(--line); color: var(--ink-3);
+}
+.badge.live { color: var(--accent); border-color: #1d4536; background: var(--accent-dk); }
+.badge.fb { color: var(--out); border-color: #3d3021; background: #241c11; }
+
+details > summary { cursor: pointer; color: var(--ink-3); font-size: 13px; list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary:hover { color: var(--ink-2); }
+pre {
+  margin: 12px 0 0; overflow-x: auto; background: var(--bg-sink);
+  border: 1px solid var(--line-soft); border-radius: var(--r-control);
+  padding: 15px 17px; font-size: 12px; line-height: 1.65; color: #93a2ae;
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+}
+
+/* ---------- landing layouts ---------- */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(32px, 5vw, 68px);
+  align-items: center;
+}
+
+.logowall {
+  border-top: 1px solid var(--line-soft);
+  padding: 26px 0;
+  display: flex; align-items: center;
+  gap: clamp(26px, 6vw, 62px);
+  flex-wrap: wrap;
+  opacity: 0.6;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.7fr;
+  gap: clamp(32px, 6vw, 76px);
+  align-items: center;
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 16px;
+  margin-top: 44px;
+}
+.bento .cell { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+
+/* Every multi-column layout collapses explicitly, never by assumption. */
+@media (max-width: 900px) {
+  .hero-grid, .problem-grid, .bento { grid-template-columns: 1fr; }
+  .problem-grid img { aspect-ratio: 16 / 10; }
+  .bento { margin-top: 32px; }
+}
+
+/* ---------- full-bleed photograph ----------
+   The scrim is what keeps the overlaid copy above WCAG AA on a photograph
+   whose brightness is not under our control. */
+.cause-shot { position: relative; margin: 0; isolation: isolate; }
+.cause-shot img {
+  width: 100%; height: clamp(430px, 62vh, 620px);
+  object-fit: cover; object-position: center 42%;
+  filter: saturate(0.82) brightness(0.82);
+}
+.cause-shot::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(7,9,10,0.95) 0%, rgba(7,9,10,0.82) 38%, rgba(7,9,10,0.28) 72%, rgba(7,9,10,0.5) 100%);
+}
+.cause-shot figcaption {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  max-width: var(--shell); margin: 0 auto; padding: 0 28px;
+}
+.cause-shot figcaption > * { max-width: 46ch; }
+@media (max-width: 700px) {
+  .cause-shot img { height: 560px; }
+  .cause-shot::after {
+    background: linear-gradient(180deg, rgba(7,9,10,0.5) 0%, rgba(7,9,10,0.9) 45%, rgba(7,9,10,0.95) 100%);
+  }
+  .cause-shot figcaption { padding: 0 18px; justify-content: flex-end; padding-bottom: 40px; }
+}
+
+/* ---------- app shell ---------- */
+.stat-row {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr;
+  gap: 16px;
+}
+.stage {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 18px 0; border-top: 1px solid var(--line-soft);
+}
+.stage:first-child { border-top: 0; padding-top: 0; }
+.app-split {
+  display: grid;
+  grid-template-columns: 1fr 0.82fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .stat-row, .app-split { grid-template-columns: 1fr; }
+}
+
+audio { width: 100%; margin-top: 16px; height: 38px; }
+audio::-webkit-media-controls-panel { background: var(--bg-sink); }

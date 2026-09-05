@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Winter Coats, Ward 4</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav stuck">
+  <div class="shell">
+    <a class="brand" href="/"><span class="brand-mark"></span> Openhand</a>
+    <div class="nav-links"><a href="/">Back to the overview</a></div>
+    <a class="btn btn-sm btn-primary" href="#give" style="margin-left:22px">Give</a>
+  </div>
+</nav>
+
+<main class="shell" style="padding-top:44px;padding-bottom:96px">
+
+  <header style="max-width:62ch">
+    <h1 style="font-size:clamp(30px,4vw,44px)" id="title">Winter Coats, Ward 4</h1>
+    <p class="lede" style="margin-top:16px" id="purpose">Reading the cause from chain.</p>
+    <p class="small" style="margin-top:14px" id="walletLine"></p>
+  </header>
+
+  <div class="stat-row" style="margin-top:40px">
+    <div class="card pad">
+      <div class="stat-lab">Held on chain now</div>
+      <div class="stat-num mono tnum" id="balance">0.000</div>
+      <div class="meter"><i id="bar" style="width:0"></i></div>
+      <div class="small" style="margin-top:12px" id="goalNote"></div>
+    </div>
+    <div class="card pad">
+      <div class="stat-lab">Paid out</div>
+      <div class="stat-num mono tnum" id="pct">0%</div>
+      <div class="small" style="margin-top:12px" id="disbursedNote"></div>
+    </div>
+    <div class="card pad">
+      <div class="stat-lab">Still unspent</div>
+      <div class="stat-num mono tnum" id="unspent">0</div>
+      <div class="small" style="margin-top:12px" id="idleNote"></div>
+    </div>
+  </div>
+
+  <h2 style="font-size:22px;margin-top:56px">The ledger</h2>
+  <p class="small" style="margin-top:8px">Every row links to its transaction. Nothing here is entered by hand.</p>
+  <div class="card" style="margin-top:18px;padding:22px 26px 8px">
+    <table class="ledger">
+      <thead>
+        <tr><th>Flow</th><th>Amount</th><th>When</th><th>Recorded purpose</th><th>Proof</th></tr>
+      </thead>
+      <tbody id="ledger">
+        <tr><td colspan="5" class="muted">Reading the chain.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="app-split" style="margin-top:56px">
+    <section style="padding:0">
+      <h2 style="font-size:22px">Your receipt</h2>
+      <p class="body" style="margin-top:10px;font-size:15px">
+        A spoken summary built only from the rows above. Any sentence the model produces
+        without a matching signature is discarded before you hear it.
+      </p>
+      <div class="card pad" style="margin-top:18px">
+        <button class="btn btn-primary" id="makeReceipt">Generate receipt</button>
+        <div id="receipt"></div>
+      </div>
+    </section>
+
+    <section style="padding:0">
+      <h2 style="font-size:22px">Where the numbers come from</h2>
+      <p class="body" style="margin-top:10px;font-size:15px">
+        Each stage says whether it is running live or on a labelled substitute.
+      </p>
+      <div class="card pad" style="margin-top:18px" id="stages"></div>
+    </section>
+  </div>
+
+  <section id="give" style="padding:56px 0 0">
+    <div class="card pad" style="display:flex;justify-content:space-between;gap:28px;align-items:center;flex-wrap:wrap">
+      <div>
+        <h2 style="font-size:22px">Give 0.05 SOL</h2>
+        <p class="body" style="margin-top:10px;font-size:15px;max-width:52ch">
+          Sends devnet SOL from your Phantom wallet to the cause address. It appears in the
+          ledger as soon as the network confirms it.
+        </p>
+        <div class="small" id="donateNote" style="margin-top:12px"></div>
+      </div>
+      <button class="btn btn-primary" id="donate">Connect wallet and give</button>
+    </div>
+  </section>
+</main>
+
+<script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
