@@ -1,5 +1,5 @@
 import {state,current,recordKey,save,api,$,notice,storageNotice,esc} from './state.js';
-import {render,renderCoverage,renderIntegrations} from './views.js';
+import {render,renderStatus,renderCoverage,renderIntegrations} from './views.js';
 let recorder,stream,recordTimer,recordingKey;
 const sample={
  provisional:{wrong:'Students must wait for their final results before applying. The final results deadline is 15 October 2026.',correct:'Students awaiting final results can apply with their latest available marksheet. They must upload their final results by 30 September 2026.'},
@@ -8,9 +8,9 @@ const sample={
 };
 function setBusy(value){state.busy=value;document.querySelectorAll('button,select,textarea,input').forEach(el=>{if(value){el.dataset.wasDisabled=String(el.disabled);el.disabled=true;}else if(el.dataset.wasDisabled!==undefined){el.disabled=el.dataset.wasDisabled==='true';delete el.dataset.wasDisabled;}});$('workspace').setAttribute('aria-busy',String(value));}
 async function task(fn,label){if(state.busy||state.recording)return;setBusy(true);notice(label||'Working…');let failed=false;try{await fn();}catch(err){failed=true;notice(err.message,true);}finally{setBusy(false);save();renderIntegrations();if(!failed){const n=$('stepNotice'),msg=label||'Working…';if(!n.hidden&&!n.classList.contains('error'))notice(n.textContent===msg?'':n.textContent,false,true);}}}
-function setMode(mode){if(state.busy||state.recording)return;state.mode=mode;notice('');render();}
+function setMode(mode){if(state.busy||state.recording)return;state.mode=mode;save();notice('');render();}
 function edit(text){const r=current();if(text!==r.text){r.text=text;delete r.result;delete r.checkToken;delete r.review;delete r.reviewToken;delete r.payment;r.history||=[];save();}}
-async function loadShared(){const key=recordKey();try{const d=await api(`/knowledge/${state.questionId}/${state.language}`);if(recordKey()===key){state.shared=d.answers;if(state.mode==='ask')render();}}catch{if(recordKey()===key)state.shared=[];}}
+async function loadShared(){const key=recordKey();try{const d=await api(`/knowledge/${state.questionId}/${state.language}`);if(recordKey()===key){state.shared=d.answers;renderStatus();if(state.mode==='ask')render();}}catch{if(recordKey()===key){state.shared=[];renderStatus();}}}
 async function selectQuestion(id,lang){if(state.busy||state.recording)return;const q=state.catalog.questions.find(q=>q.id===id);if(!q)return;state.questionId=id;state.language=lang||q.language;state.shared=[];save();notice('');render();loadShared();}
 async function refreshCoverage(){state.coverage=await api('/coverage');if(state.coverage.source==='snowflake')state.providers.snowflake='live';renderCoverage();renderIntegrations();}
 async function syncKnowledge(){
@@ -60,7 +60,7 @@ async function startRecording(){if(!current().voiceConsent){$('voiceDialog').sho
 const handlers={
  check:()=>task(checkContribution,'Checking contribution…'),ask:()=>task(ask,'Reading the source…'),request:()=>task(requestQuestion,'Recording the knowledge gap…'),approve:()=>task(approve,'Recording your review…'),pay:()=>task(pay,'Preparing a devnet bounty…'),verifyPayment:()=>task(verifyPending,'Checking finalized payment…'),
  listenFollowup:()=>task(()=>play('check',current().checkToken,'feedbackAudio'),'Creating spoken follow-up…'),listenDraft:()=>task(()=>play('draft',current().answerToken,'draftAudio'),'Creating spoken draft…'),listenReviewed:()=>task(()=>play('review',current().reviewToken||state.shared[0]?.reviewToken,'answerAudio'),'Creating spoken answer…'),
- goContribute:()=>setMode('contribute'),goReview:()=>setMode('review'),goFund:()=>setMode('fund'),source:()=>$('sourceDialog').showModal(),export:exportRecord,
+ goAsk:()=>{setMode('ask');loadShared();},goContribute:()=>setMode('contribute'),goReview:()=>setMode('review'),goFund:()=>setMode('fund'),source:()=>$('sourceDialog').showModal(),export:exportRecord,
  sampleWrong:()=>{edit(sample[state.questionId].wrong);render();notice('Loaded an intentionally incorrect fictional example. Check it to see the correction loop.');},sampleCorrect:()=>{edit(sample[state.questionId].correct);render();notice('Loaded a corrected fictional example. Run the source check before review.');},
  voice:()=>{if(!state.catalog.integrations.transcription.startsWith('configured')){notice('Transcription is not configured yet. You can type your contribution.',true);return;}$('voiceConsent').checked=!!current().voiceConsent;$('beginVoice').disabled=!$('voiceConsent').checked;$('voiceDialog').showModal();},record:()=>startRecording().catch(e=>notice(e.message,true)),stopRecord:()=>{if(recorder?.state==='recording')recorder.stop();}
 };
