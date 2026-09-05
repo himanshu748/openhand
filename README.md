@@ -2,7 +2,7 @@
 
 Pass It On lets a volunteer leave an explanation that the next person can read or hear. Contribute by text or voice, correct the answer against a source, try the demo reviewer role, and share the approved answer through Snowflake. The knowledge flow works without a wallet; a sponsor can optionally fund a fixed Solana devnet bounty.
 
-[Try the app](https://openhand-eta.vercel.app/app) · [DEV submission draft](docs/dev-submission.md) · [90-second demo script](docs/demo-script.md) · [Readiness and remaining gaps](docs/challenge-readiness.md)
+[Try the app](https://pass-it-on-himanshu.vercel.app/app) · [DEV submission draft](docs/dev-submission.md) · [90-second demo script](docs/demo-script.md) · [Readiness and remaining gaps](docs/challenge-readiness.md)
 
 This replaces Openhand’s original donation-ledger front page. The earlier ledger is still available at `/ledger`; its implementation history is in [docs/ledger-history.md](docs/ledger-history.md).
 
@@ -64,6 +64,8 @@ This is a hackathon demo, not a scholarship or financial service. A real communi
 Do not enter private applicant records. Recordings are sent to ElevenLabs only after the visitor opts into the recording flow; transcripts and typed text are sent to Google AI for checking. If Snowflake is connected, review acknowledgements authorize sharing the fictional approved answer in the demo collection. Local browser records survive refresh; no real identity is verified.
 
 ## Landing page and shared knowledge
+
+The canonical site is https://pass-it-on-himanshu.vercel.app. The earlier https://openhand-eta.vercel.app address remains available. The repository is now https://github.com/himanshu748/pass-it-on; the original Openhand implementation is retained as project history.
 
 `/` introduces the product, shows a clearly labelled fictional example, and explains each provider's role. `/app` is the working contribution flow; `/app?example=correction` loads the deliberately incorrect example only when the current draft is empty. `/ledger` preserves the earlier Openhand ledger.
 

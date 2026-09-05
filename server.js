@@ -116,5 +116,5 @@ app.post('/api/rpc',async(req,res)=>{
 app.use((err,_req,res,_next)=>res.status(400).json({error:'Invalid request.'}));
 export default app;
 if (!process.env.VERCEL && process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
-  app.listen(PORT,'127.0.0.1',()=>console.log(`Openhand: http://localhost:${PORT}`));
+  app.listen(PORT,'127.0.0.1',()=>console.log(`Pass It On: http://localhost:${PORT}`));
 }

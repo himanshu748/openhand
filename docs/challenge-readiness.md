@@ -19,7 +19,7 @@ The challenge FAQ limits participants to one submission, while the [contest rule
 | Technical execution | Wrong example rejected, two acknowledgements, signed shared answer, fresh-session playback | The reviewer is a demo role |
 | Writing | Follow the actual contribution through the DEV template | No invented origin story, impact numbers, or reliability promises |
 | Google AI | Both planted errors caught; corrected claims include source excerpts | Exact quotes do not guarantee semantic correctness |
-| ElevenLabs | Hindi answer playback; sample-audio transcription | Device microphone path still unverified |
+| ElevenLabs | Hindi answer playback; sample-audio transcription | Device recording confirmed by the project owner; automated evidence is separate |
 | Snowflake | Persistent shared answers and demand/coverage query | Demo counts are not unique people |
 | Solana | Existing finalized transfer with contribution memo | Fixed recipient, devnet, direct transfer, concurrent-payment limit |
 
@@ -27,7 +27,7 @@ Lead with the contribution and correction flow. In our assessment, Google AI and
 
 ## Remaining work before calling it ready
 
-1. Test microphone permission, recording, transcription, editing, and spoken follow-up on a real device. Do not claim this passed until observed.
+1. Device recording is confirmed working by the project owner. The existing automated and agent-observed evidence remains separately labelled in the audit notes.
 2. Ask a person unfamiliar with the app to complete the correction and find the shared answer. Record friction and actual feedback with their permission. No external feedback has been collected by this preparation pass.
 3. Record the demo script if a video is desired. There is no completed video artifact in this pack.
 4. Shared-answer expiry is fixed: published Snowflake answers remain readable against the current source, while action tokens still expire after seven days. A regression test advances the clock 40 days and checks reading, playback, and rejected payment/sync attempts. Results are scheduled for 1 October. Snowflake service access still expires around 5 October, and provider quotas need attention.

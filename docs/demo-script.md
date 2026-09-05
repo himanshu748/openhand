@@ -14,6 +14,6 @@ Use fictional example text throughout. Keep provider responses visible. Cut wait
 | 72–82s | Coverage table, matching question and language | “Snowflake also compares question requests with reviewed answers, so a volunteer can see where an explanation is missing.” |
 | 82–90s | Existing devnet receipt with memo visible | “A sponsor can fund an approved contribution. This receipt links a test payment to its contribution. It uses valueless devnet SOL.” |
 
-Do a microphone recording test before adding a claim that the complete spoken interview works on a real device. The existing proof covers generated-audio transcription and live answer playback. If the microphone flow is demonstrated later, record consent, capture, editable transcript, and follow-up; extend the video rather than squeezing that into an unreadable montage.
+The project owner has confirmed device recording works. For a spoken-interview video, show consent, capture, the editable transcript, and follow-up. Extend the video rather than squeezing that into an unreadable montage. The recorded audit evidence separately covers generated-audio transcription and live answer playback.
 
 If a provider fails, retain the failure for debugging and record again after fixing it. Keep a successful run as backup, dated and labelled as a recording. The written submission can use the deployed link without a video.

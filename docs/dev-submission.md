@@ -18,7 +18,7 @@ Visitors can try that reviewer role themselves. It is labelled as a demo role; a
 
 ## Demo
 
-[Visit the hosted site](https://openhand-eta.vercel.app/) · [Open the app](https://openhand-eta.vercel.app/app) · [Try the correction example](https://openhand-eta.vercel.app/app?example=correction)
+[Visit the hosted site](https://pass-it-on-himanshu.vercel.app/) · [Open the app](https://pass-it-on-himanshu.vercel.app/app) · [Try the correction example](https://pass-it-on-himanshu.vercel.app/app?example=correction)
 
 A volunteer explains a rule by speaking or typing. ElevenLabs reads the question, transcribes the spoken response, and voices the follow-up. Gemini compares the explanation with the handbook, flags mistakes, and returns supporting source excerpts. The volunteer can correct the answer and check it again before a person approves it in the labelled demo reviewer role.
 
@@ -28,11 +28,11 @@ A sponsor can then reward the approved contribution through Solana. The demo has
 
 ## Code
 
-[GitHub repository](https://github.com/himanshu748/openhand)
+[GitHub repository](https://github.com/himanshu748/pass-it-on)
 
-The repository still has its original name, Openhand. The first version was a giving ledger; Pass It On became the main experience during this challenge. The ledger remains at `/ledger`.
+The project began as Openhand, a giving ledger, and became Pass It On during this challenge. The earlier ledger remains at `/ledger`.
 
-The repository includes [testing notes and known limits](https://github.com/himanshu748/openhand/blob/main/design-qa.md), [Snowflake verification](https://github.com/himanshu748/openhand/blob/main/docs/snowflake-live-verification.json), and [live shared-answer playback evidence](https://github.com/himanshu748/openhand/blob/main/docs/publication-live-verification.json). The 32 automated tests use injected providers; the notes distinguish those results from live service checks, including the outstanding device-microphone test.
+The repository includes [testing notes and known limits](https://github.com/himanshu748/pass-it-on/blob/main/design-qa.md), [Snowflake verification](https://github.com/himanshu748/pass-it-on/blob/main/docs/snowflake-live-verification.json), and [live shared-answer playback evidence](https://github.com/himanshu748/pass-it-on/blob/main/docs/publication-live-verification.json). The 32 automated tests use injected providers; the notes distinguish those results from live service checks, with device recording confirmed by the project owner.
 
 ## How I Built It
 

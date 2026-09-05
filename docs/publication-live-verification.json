@@ -21,5 +21,10 @@
     "durationSeconds": 11.517098,
     "readyState": 4,
     "mediaError": false
+  },
+  "userConfirmation": {
+    "reportedAt": "2026-09-05T17:42:36.578660+00:00",
+    "deviceMicrophone": "Project owner reports it is working",
+    "verificationType": "user-reported; prior agent-observed evidence unchanged"
   }
 }

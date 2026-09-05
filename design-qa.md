@@ -114,3 +114,10 @@ Playback refreshes the shared reading token, and the browser renews an expired a
 The automated suite passes 32 tests, including a 40-day clock advance, rejection of tampered/stale-source/wrong-topic/wrong-kind records, playback after action expiry, playback-token refresh, and rejection of expired or read-only proofs by payment and sync endpoints. Syntax checks pass. These time-shifted tests use injected providers, not the production clock. Actual device microphone recording remains pending the user's sample.
 
 The protected production candidate also returned a real Snowflake Hindi answer and ElevenLabs playback (about 196 KB). Its reading token was rejected by payment preparation, and an invalid session returned the expected renewal signal. See `docs/publication-live-verification.json`. No new payment was sent.
+
+
+## Project owner confirmation and rename
+
+The project owner reports recording is working. This supersedes the pending-user-sample checklist item; it is user confirmation, not a new agent-observed microphone recording. Earlier timestamped test evidence is preserved.
+
+The repository is now `himanshu748/pass-it-on`, the package name is `pass-it-on`, and the public project name is Pass It On. The branded URL is https://pass-it-on-himanshu.vercel.app; the prior hosted URL remains available.
