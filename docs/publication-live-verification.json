@@ -15,5 +15,11 @@
     "publishedReadAndPlayback": true,
     "expiredAuthorizationRejectedForPaymentAndSync": true
   },
-  "deviceMicrophone": "pending user sample"
+  "deviceMicrophone": "pending user sample",
+  "publicURL": "https://openhand-eta.vercel.app/app",
+  "publicBrowserPlayback": {
+    "durationSeconds": 11.517098,
+    "readyState": 4,
+    "mediaError": false
+  }
 }
