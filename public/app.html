@@ -27,7 +27,7 @@
       <span class="sk sk-line" style="display:block;width:88%"></span>
       <span class="sk sk-line" style="display:block;width:54%"></span>
     </p>
-    <p class="small" style="margin-top:14px" id="walletLine"></p>
+    <p class="small" style="margin-top:14px" id="walletLine"></p><p class="small" id="readStatus" aria-live="polite" style="margin-top:12px"></p><button class="btn btn-sm" id="refresh" style="margin-top:12px">Refresh chain read</button>
   </header>
 
   <!-- Every figure below opens into the rows that produce it, and the rows are
@@ -48,7 +48,7 @@
         <span class="chev" aria-hidden="true">&rsaquo;</span>
       </button>
       <div class="small" style="margin-top:12px" id="disbursedNote"></div>
-      <div class="trace" id="tracePaidPanel" data-open="false"><div><div class="trace-inner" id="tracePaidBody"></div></div></div>
+      <div class="trace" id="tracePaidPanel" data-open="false" hidden><div><div class="trace-inner" id="tracePaidBody"></div></div></div>
     </div>
 
     <div class="card pad">
@@ -58,24 +58,26 @@
         <span class="chev" aria-hidden="true">&rsaquo;</span>
       </button>
       <div class="small" style="margin-top:12px" id="idleNote"></div>
-      <div class="trace" id="traceUnspentPanel" data-open="false"><div><div class="trace-inner" id="traceUnspentBody"></div></div></div>
+      <div class="trace" id="traceUnspentPanel" data-open="false" hidden><div><div class="trace-inner" id="traceUnspentBody"></div></div></div>
     </div>
   </div>
 
-  <section id="ledger-section" style="padding:56px 0 0">
+  <section class="card pad" style="margin-top:24px" id="reconciliation" aria-live="polite"></section>
+<section style="padding:36px 0 0"><h2 style="font-size:22px">What happened to each donation?</h2><p class="small" style="margin-top:8px">Oldest contributions are allocated first (FIFO). This is an accounting policy for pooled funds, not proof of delivery.</p><div id="journey" class="card pad" style="margin-top:18px"></div></section>
+<section id="ledger-section" style="padding:56px 0 0">
     <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap">
       <div>
         <h2 style="font-size:22px">The ledger</h2>
-        <p class="small" style="margin-top:8px">Select a row to open it. Nothing here is entered by hand.</p>
+        <p class="small" style="margin-top:8px">Select a row to open it. Transfers, fees, and other changes remain separate.</p>
       </div>
       <div class="filters" role="group" aria-label="Filter the ledger">
         <button class="chip" data-filter="all" aria-pressed="true">All</button>
         <button class="chip" data-filter="donation" aria-pressed="false">Money in</button>
-        <button class="chip" data-filter="payout" aria-pressed="false">Money out</button>
+        <button class="chip" data-filter="payout" aria-pressed="false">Money out</button><button class="chip" data-filter="fee" aria-pressed="false">Fees</button>
       </div>
     </div>
 
-    <div class="card" style="margin-top:18px;padding:22px 26px 8px">
+    <div class="card table-wrap" style="margin-top:18px;padding:22px 26px 8px">
       <table class="ledger">
         <thead>
           <tr><th>Flow</th><th>Amount</th><th>When</th><th>Recorded purpose</th><th>Proof</th></tr>
@@ -93,13 +95,12 @@
 
   <div class="app-split" style="margin-top:56px">
     <section style="padding:0">
-      <h2 style="font-size:22px">Your receipt</h2>
+      <h2 style="font-size:22px">Your checked update</h2>
       <p class="body" style="margin-top:10px;font-size:15px">
-        A spoken summary built only from the rows above. Any sentence the model produces
-        without a matching signature is discarded before you hear it.
+        Amounts and evidence come from this ledger snapshot. AI may select events; it cannot supply the final prose or change the numbers.
       </p>
       <div class="card pad" style="margin-top:18px">
-        <button class="btn btn-primary" id="makeReceipt">Generate receipt</button>
+        <button class="btn btn-primary" id="makeReceipt" disabled>Generate checked update</button>
         <div id="receipt"></div>
       </div>
     </section>
@@ -107,28 +108,28 @@
     <section style="padding:0">
       <h2 style="font-size:22px">Where the numbers come from</h2>
       <p class="body" style="margin-top:10px;font-size:15px">
-        Each stage says whether it is running live or on a labelled substitute.
+        Configured means the service is set up. Live means it successfully produced this update.
       </p>
       <div class="card pad" style="margin-top:18px" id="stages"></div>
     </section>
   </div>
 
-  <section id="give" style="padding:56px 0 0">
+  <section class="card pad" style="margin-top:36px"><h2 style="font-size:22px">Try to fool the receipt</h2><p class="body" style="margin-top:12px">Keep a real transaction signature, but add 1 SOL to its amount. The check should refuse it.</p><button id="checkClaim" disabled class="btn" style="margin-top:18px">Test an altered claim</button><p id="claimResult" class="small" style="margin-top:14px" aria-live="polite"></p></section>
+<section id="give" style="padding:56px 0 0">
     <div class="card pad" style="display:flex;justify-content:space-between;gap:28px;align-items:center;flex-wrap:wrap">
       <div>
-        <h2 style="font-size:22px">Give 0.05 SOL</h2>
+        <h2 style="font-size:22px">Try a 0.05 SOL test donation</h2>
         <p class="body" style="margin-top:10px;font-size:15px;max-width:52ch">
-          Sends devnet SOL from your Phantom wallet to the cause address. It appears in the
-          ledger as soon as the network confirms it.
+          Sends valueless devnet SOL to this dedicated demo wallet. No real charity receives funds. Your transfer appears after finalization; no wallet is needed to inspect the demo.
         </p>
         <div class="small" id="donateNote" style="margin-top:12px"></div>
       </div>
-      <button class="btn btn-primary" id="donate">Connect wallet and give</button>
+      <button class="btn btn-primary" id="donate" disabled>Connect Phantom for devnet</button>
     </div>
   </section>
 </main>
 
-<script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+<script src="/vendor/solana-web3.js"></script>
 <script src="/app.js"></script>
 </body>
 </html>

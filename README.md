@@ -1,81 +1,68 @@
-# Openhand
+# Pass It On
 
-A giving ledger where the donor can check every claim it makes. You give to a
-cause, and the page shows you what came in, what went out, how long the money
-sat still, and a spoken receipt whose every sentence is backed by a transaction
-signature you can click.
+**Help once. Help the next hundred.** A working generosity demo: ask a question, contribute an explanation by voice, correct it against a source, review it as a person, and fund the accepted contribution with a Solana devnet bounty.
 
-Small causes ask for trust and hand back a screenshot. Openhand hands back proof.
+This replaces Openhand’s original donation-ledger front page. The earlier ledger is still available at `/ledger`; its implementation history is in [docs/ledger-history.md](docs/ledger-history.md).
 
-Built for the DEV Weekend Challenge: Generosity Edition.
+## The demonstration
 
-## Run it
+The Asha Learning Grant handbook is **fictional, authored demo material**. There is no real scholarship, application portal, eligibility decision, or cash bounty. Review is an explicitly labelled demo role that visitors can try; it is not independently authenticated review.
 
-```bash
-cd openhand && npm install && cp .env.example .env && npm start
+1. In **Questions**, request a reviewed answer in English or Hindi, or ask Gemini a new question about the selected topic. A generated draft stays labelled as not human-reviewed.
+2. In **Contribute**, type an explanation or start a spoken interview. ElevenLabs reads the question, transcribes a recording, and speaks Gemini’s follow-up. Recordings last at most 45 seconds. Transcripts remain editable.
+3. Try the incorrect provisional-application example. Gemini must identify the incorrect requirement and date, and ask for correction. The server validates every quoted excerpt against the exact source text. A failed check cannot unlock review.
+4. Correct the contribution. In **Review**, compare its claims and excerpts, then explicitly acknowledge source checking and the demo reviewer role. Signed evidence binds the checked contribution, language, source version, and demo session.
+5. In **Funding**, a sponsor using Phantom signs a fixed **0.001 devnet SOL** transfer to the dedicated demo contributor. The transaction includes the contribution hash in its memo. The app records the signature before submission and only marks paid after finalized chain verification of signer, sender, recipient, amount, and memo.
+
+The payment is a direct transfer, not escrow. No wallet private key is deployed. Test SOL has no monetary value. Payment does not establish answer correctness.
+
+## What each technology does
+
+- **Gemini:** source comparison, structured claims, multilingual explanations, and targeted follow-up questions. Semantic checks may be wrong; human review remains necessary. Provider errors fail closed and retain the draft.
+- **ElevenLabs:** Scribe v2 transcription plus multilingual speech for a recorded-turn interview and spoken answers. This is a custom interview loop using Gemini, not a configured ElevenLabs Agents instance. No voice cloning.
+- **Snowflake:** SQL API persistence of anonymous question/check metadata and approved demo answer proofs; a coverage query joins demand and reviews by question, language, and current source version. Shared answers load only after verifying the stored signed review. Counts represent demo sessions, not verified people.
+- **Solana:** devnet sponsor payment with contribution-linked memo and finalized verification. The app blocks repeated payment when an existing finalized memo is found, and refuses to infer unpaid if recipient history exceeds its bounded lookup.
+
+When Snowflake is unavailable, the UI explicitly shows browser-local records and counts. That is **not** a live Snowflake integration. A configured provider status does not claim a successful request.
+
+## Run and test
+
+Node 22 is the deployment runtime. The existing Express and vanilla ES module stack is retained.
+
+```sh
+npm ci
+cp .env.example .env
+npm start
+npm test
+npm run check
 ```
 
-Open http://localhost:3000 for the overview, or go straight to the live ledger
-at http://localhost:3000/app. The app runs with no credentials at all: each
-integration that is missing its key falls back to a labelled substitute and the
-UI says so, rather than pretending. Fill in `.env` to turn each one live.
+No credentials are needed to browse the handbook and UI. Gemini and voice operations need server credentials. Automated tests use injected providers and never spend credits or send transactions.
 
-To put real transactions behind a fresh cause wallet on devnet:
+The tests cover integer accounting and existing ledger behavior, exact source excerpts, tampered/expired proofs, provider failures, SQL parameter binding and polling, human review gates, cross-session review rejection, and exact devnet payment matching.
 
-```bash
-npm run seed
-```
+## Server configuration
 
-## What each sponsor does, and what breaks without it
+- `GOOGLE_API_KEY`, `GOOGLE_MODEL` (verified deployment model: `gemini-3.6-flash`). Free-tier quotas still apply.
+- `ELEVENLABS_API_KEY` with Text to Speech and Speech to Text access; `ELEVENLABS_STT_ENABLED=true` only after scope configuration. Optional `ELEVENLABS_VOICE_ID` and `ELEVENLABS_MODEL`.
+- `PASSITON_SIGNING_KEY`: independent random secret, at least 32 bytes, required on Vercel. Review evidence expires after seven days. Local development uses a process-local key; restarting invalidates local proofs.
+- `SOLANA_RPC_URL`: optional devnet RPC. The genesis hash is checked before payment operations. Never configure this demo for mainnet.
+- Snowflake: `SNOWFLAKE_ACCOUNT`, `SNOWFLAKE_JWT_ACCOUNT` (account identifier in JWT), `SNOWFLAKE_USER`, `SNOWFLAKE_PRIVATE_KEY`, `SNOWFLAKE_DATABASE=PASSITON`, `SNOWFLAKE_SCHEMA=PUBLIC`, `SNOWFLAKE_WAREHOUSE=PASSITON_WH`, `SNOWFLAKE_ROLE=PASSITON_APP`. Alternatively a scoped `SNOWFLAKE_TOKEN` can use PAT auth under the account’s network-policy requirements.
 
-**Solana, the truth.** Donations and payouts are real transfers on devnet. The
-balance is read from the chain on every page load and never stored. Every ledger
-row links to its signature on the explorer. Without this the totals are just
-numbers in a table that anyone could type.
+Run [sql/passiton.sql](sql/passiton.sql) through an authorized Snowflake administrator. It creates an X-Small warehouse with 60-second auto-suspend, the demo schema, and a limited application role. Attach the role and an RSA public key to a dedicated service user. Keep the private key server-side. Do not use the user’s admin password or weaken account/network protections.
 
-**Snowflake, the time.** Chain events are ingested and seven accountability
-metrics are computed in SQL over that history: percent disbursed, median hours
-from a donation to the next payout, how many donations are still unspent, days
-since the last payout. A single chain query cannot tell you that a cause has
-been holding your money for eleven days. That needs the ordered history in one
-place. The SQL is in `sql/metrics.sql` and is shown in the UI.
+Production Snowflake was connected and verified on 5 September 2026. The dedicated service user expires after 30 days, around 5 October 2026; renew its authorized access before then to keep the shared library available. Its role can read the question catalog and read/insert demo events, with no table deletion or administrative privileges. See [live Snowflake evidence](docs/snowflake-live-verification.json) for successful request persistence, replay deduplication, approved-answer sync and coverage queries.
 
-**Google AI, the translation.** Gemini turns ledger rows into a plain donor
-update. It is required to cite the signature behind every claim, and any claim
-whose signature is not in the ledger is dropped before it reaches the page. The
-UI reports how many were dropped. The model cannot invent a payout.
+[lib/passiton/warehouse.js](lib/passiton/warehouse.js) contains the production query. User values use bind parameters. Only aggregate coverage and verified approved demo answers are returned to visitors; raw volunteer recordings are not retained by the app.
 
-**ElevenLabs, the artifact.** The receipt is spoken and paced with deliberate
-breaks so the numbers land one at a time. It is the part a donor actually keeps
-and forwards, which is the difference between an audit trail and an update.
+## Limits before any real deployment
 
-## Layout
+This is a hackathon demo, not a scholarship or financial service. A real community deployment needs authenticated independent reviewers, consent/moderation and deletion workflows for published contributions, durable distributed rate limits, production payment/account controls, and a sustainable provider quota. The current app has per-instance request limits and a fixed devnet recipient. Direct sponsor transfers are not atomic bounty claims: two simultaneous sponsors could both pay; the demo does not claim escrow or exactly-once settlement.
 
-```
-server.js           HTTP API
-lib/solana.js       chain reads, signature-keyed cache, rate-limit backoff
-lib/snowflake.js    warehouse metrics, with the same seven computed locally as fallback
-lib/gemini.js       grounded narrative and the claim-dropping gate
-lib/voice.js        receipt script and speech
-sql/metrics.sql     the accountability metrics
-public/index.html   the overview, whose hero panel reads live chain data
-public/app.html     the live ledger, receipt, and Phantom wallet donation
-public/styles.css   design tokens: dark theme lock, one accent, one radius rule
-```
+Do not enter private applicant records. Recordings are sent to ElevenLabs only after the visitor opts into the recording flow; transcripts and typed text are sent to Google AI for checking. If Snowflake is connected, review acknowledgements authorize sharing the fictional approved answer in the demo collection. Local browser records survive refresh; no real identity is verified.
 
-## Known limits
+## Landing page and shared knowledge
 
-- Runs on devnet. The public devnet RPC rate limits hard, so parsed transactions
-  are cached by signature. A free Helius or QuickNode devnet URL in
-  `SOLANA_RPC_URL` makes first load fast.
-- `npm i snowflake-sdk` is needed before the Snowflake path can connect. It is
-  not a hard dependency so the app installs and runs without it.
+`/` introduces the product, shows a clearly labelled fictional example, and explains each provider's role. `/app` is the working contribution flow; `/app?example=correction` loads the deliberately incorrect example only when the current draft is empty. `/ledger` preserves the earlier Openhand ledger.
 
-## A note on read latency
-
-The public devnet RPC rate limits parsed-transaction calls hard. Openhand caches
-parsed transactions by signature, warms that cache at boot, and holds the assembled
-API response for `RESPONSE_TTL_MS` (20 seconds by default) so a visitor is never
-left watching an empty panel. Every response reports `ageMs`, the age of the chain
-read it came from. Set `SOLANA_RPC_URL` to a Helius or QuickNode devnet endpoint
-and the cold read drops to well under a second.
+The landing page reads provider configuration from the server and does not claim Snowflake is live before it is connected. The workspace's **Sync this browser** action sends local requests and signed approved answers to Snowflake after connection. Sync reuses event IDs and verifies session ownership/source version; drafts, failed checks and raw audio are not shared. Expired review proofs must be checked and reviewed again.

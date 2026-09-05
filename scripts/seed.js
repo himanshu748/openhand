@@ -1,96 +1,52 @@
-// Creates a real cause wallet on devnet and puts real transactions behind it:
-// two donations in, one payout out with a memo. Nothing here is simulated.
+// Idempotent devnet-only demonstration. Private keys never enter the server.
 import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import {
-  Connection, Keypair, LAMPORTS_PER_SOL, PublicKey,
-  SystemProgram, Transaction, TransactionInstruction, sendAndConfirmTransaction,
-} from '@solana/web3.js';
-import { RPC_URL } from '../lib/config.js';
-
-const MEMO_PROGRAM = new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
-const here = path.dirname(fileURLToPath(import.meta.url));
-const keysPath = path.join(here, '..', 'data', 'keys.json');
-const causesPath = path.join(here, '..', 'data', 'causes.json');
-const conn = new Connection(RPC_URL, 'confirmed');
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-function loadOrCreateKeys() {
-  if (fs.existsSync(keysPath)) {
-    const raw = JSON.parse(fs.readFileSync(keysPath, 'utf8'));
-    return {
-      cause: Keypair.fromSecretKey(Uint8Array.from(raw.cause)),
-      donors: raw.donors.map((d) => Keypair.fromSecretKey(Uint8Array.from(d))),
-    };
+import {Keypair,PublicKey,Transaction,SystemProgram,TransactionInstruction} from '@solana/web3.js';
+import bs58 from 'bs58';
+import {connection,health} from '../lib/solana.js';
+const keysPath=process.env.OPENHAND_KEYS_PATH || new URL('../data/keys.json',import.meta.url);
+const statePath=new URL('../data/seed-state.json',import.meta.url);
+await health();
+if(!fs.existsSync(keysPath)) {
+  const cause=Keypair.generate(),donors=[Keypair.generate(),Keypair.generate()];
+  fs.writeFileSync(keysPath,JSON.stringify({cause:[...cause.secretKey],donors:donors.map(d=>[...d.secretKey])}),{mode:0o600});
+}
+const raw=JSON.parse(fs.readFileSync(keysPath,'utf8'));
+const cause=Keypair.fromSecretKey(Uint8Array.from(raw.cause));
+const donors=raw.donors.map(d=>Keypair.fromSecretKey(Uint8Array.from(d)));
+let state=fs.existsSync(statePath)?JSON.parse(fs.readFileSync(statePath,'utf8')):{cause:cause.publicKey.toBase58(),vendor:Keypair.generate().publicKey.toBase58(),steps:{}};
+if(state.cause!==cause.publicKey.toBase58())throw new Error('Seed state belongs to another wallet.');
+const save=()=>fs.writeFileSync(statePath,JSON.stringify(state,null,2),{mode:0o600});
+const configured=JSON.parse(fs.readFileSync(new URL('../data/causes.json',import.meta.url),'utf8'));
+if(configured[0].wallet!==state.cause)throw new Error('Configure causes.json with this dedicated wallet before seeding.');
+save();
+async function step(id,from,to,lamports,memo) {
+  let s=state.steps[id];
+  if(!s){
+    const latest=await connection.getLatestBlockhash('confirmed');
+    const tx=new Transaction({feePayer:from.publicKey,recentBlockhash:latest.blockhash}).add(SystemProgram.transfer({fromPubkey:from.publicKey,toPubkey:to,lamports}));
+    tx.add(new TransactionInstruction({keys:[],programId:new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),data:Buffer.from(memo)}));
+    tx.sign(from);s={signature:bs58.encode(tx.signature),bytes:tx.serialize().toString('base64'),...latest};state.steps[id]=s;save();
   }
-  const cause = Keypair.generate();
-  const donors = [Keypair.generate(), Keypair.generate()];
-  fs.writeFileSync(
-    keysPath,
-    JSON.stringify({ cause: Array.from(cause.secretKey), donors: donors.map((d) => Array.from(d.secretKey)) }, null, 2)
-  );
-  return { cause, donors };
-}
-
-async function fund(kp, sol) {
-  const have = await conn.getBalance(kp.publicKey);
-  if (have >= sol * LAMPORTS_PER_SOL) {
-    console.log(`  already funded: ${kp.publicKey.toString()} (${have / LAMPORTS_PER_SOL} SOL)`);
-    return true;
+  let status=(await connection.getSignatureStatuses([s.signature],{searchTransactionHistory:true})).value[0];
+  if(status?.err)throw new Error(`${id} failed on chain. Review before retrying.`);
+  if(status?.confirmationStatus!=='finalized'){
+    if(!status){
+      if(await connection.getBlockHeight('confirmed')>s.lastValidBlockHeight)throw new Error(`${id} expired without a known result. Review ${s.signature} before resetting this step.`);
+      await connection.sendRawTransaction(Buffer.from(s.bytes,'base64'),{skipPreflight:false,preflightCommitment:'confirmed',maxRetries:3});
+    }
+    const confirmation=await connection.confirmTransaction({signature:s.signature,blockhash:s.blockhash,lastValidBlockHeight:s.lastValidBlockHeight},'finalized');
+    if(confirmation.value.err)throw new Error(`${id} failed on chain.`);
   }
-  try {
-    const sig = await conn.requestAirdrop(kp.publicKey, sol * LAMPORTS_PER_SOL);
-    await conn.confirmTransaction(sig, 'confirmed');
-    console.log(`  airdropped ${sol} SOL to ${kp.publicKey.toString()}`);
-    return true;
-  } catch (err) {
-    console.log(`  AIRDROP FAILED for ${kp.publicKey.toString()}: ${String(err.message || err).slice(0, 120)}`);
-    return false;
-  }
+  s.finalized=true;save();console.log(`${id}: https://explorer.solana.com/tx/${s.signature}?cluster=devnet`);
 }
-
-async function transfer(from, to, sol, memo) {
-  const tx = new Transaction().add(
-    SystemProgram.transfer({ fromPubkey: from.publicKey, toPubkey: to, lamports: Math.round(sol * LAMPORTS_PER_SOL) })
-  );
-  if (memo) {
-    tx.add(new TransactionInstruction({ keys: [], programId: MEMO_PROGRAM, data: Buffer.from(memo, 'utf8') }));
-  }
-  const sig = await sendAndConfirmTransaction(conn, tx, [from], { commitment: 'confirmed' });
-  console.log(`  ${sol} SOL ${memo ? `(memo: ${memo}) ` : ''}-> ${sig}`);
-  return sig;
+const have=await connection.getBalance(donors[0].publicKey,'finalized');
+const needed=state.steps['fund-second']?.finalized ? 150005000 : 220000000;
+if(!state.steps['gift-one'] && have<needed){
+  console.log(`Fund this devnet donor to at least ${needed/1e9} test SOL: ${donors[0].publicKey.toBase58()}`);process.exit(2);
 }
-
-const { cause, donors } = loadOrCreateKeys();
-console.log(`Cause wallet: ${cause.publicKey.toString()}`);
-console.log(`RPC: ${RPC_URL}\n`);
-
-console.log('Funding donor wallets from the devnet faucet');
-const funded = [];
-for (const d of donors) {
-  if (await fund(d, 1)) funded.push(d);
-  await sleep(1500);
-}
-
-if (funded.length === 0) {
-  console.log('\nNo donor wallet could be funded. The devnet faucet is rate limited.');
-  console.log('Fund this address manually at https://faucet.solana.com then re-run:');
-  console.log(`  ${donors[0].publicKey.toString()}`);
-  process.exit(1);
-}
-
-console.log('\nRecording donations on chain');
-for (const d of funded) await transfer(d, cause.publicKey, 0.35, null);
-
-console.log('\nRecording a payout on chain');
-await transfer(cause.publicKey, funded[0].publicKey, 0.2, 'paid Northline Outfitters for 24 coats');
-
-const causes = JSON.parse(fs.readFileSync(causesPath, 'utf8'));
-causes[0].wallet = cause.publicKey.toString();
-fs.writeFileSync(causesPath, JSON.stringify(causes, null, 2));
-
-const bal = await conn.getBalance(cause.publicKey);
-console.log(`\nDone. Cause balance on chain: ${bal / LAMPORTS_PER_SOL} SOL`);
-console.log(`Explorer: https://explorer.solana.com/address/${cause.publicKey.toString()}?cluster=devnet`);
+await step('fund-second',donors[0],donors[1].publicKey,60000000,'Openhand demo: provision second test donor');
+await step('gift-one',donors[0],cause.publicKey,150000000,'Openhand demo: first fictional coat-drive contribution');
+await step('gift-two',donors[1],cause.publicKey,50000000,'Openhand demo: second fictional coat-drive contribution');
+await step('payout',cause,new PublicKey(state.vendor),80000000,'Openhand DEMO payout to a test vendor wallet. No real coats purchased.');
+console.log(`Dedicated cause wallet: ${state.cause}`);
+console.log(`Balance: ${await connection.getBalance(cause.publicKey,'finalized')} lamports`);

@@ -31,7 +31,7 @@ new IntersectionObserver(([e]) => nav.classList.toggle('stuck', !e.isIntersectin
 
 // Dust-sized transfers would render as 0.0000 at four places, which reads as a
 // bug rather than as a small number.
-const amount = (n) => (n > 0 && n < 0.0001 ? n.toFixed(6) : n.toFixed(4));
+const amount = n => n.toFixed(9).replace(/\.?0+$/, '') || '0';
 
 // Write the real value first. requestAnimationFrame is throttled in a background
 // tab, so an animation that never starts must still leave the correct number.
@@ -76,12 +76,12 @@ async function readCause(tries = 4) {
     const d = await readCause();
     if (d.error) throw new Error(d.error);
 
-    countTo(document.getElementById('heroBalance'), d.balanceSol, (v) => `${v.toFixed(3)} SOL`);
+    countTo(document.getElementById('heroBalance'), d.balanceSol, (v) => `${amount(v)} SOL`);
     // Say how old the read is. A cached number presented as a live one would
     // undercut the whole point of the page.
     badge.textContent = `read ${ago(d.ageMs || 0)}`;
 
-    document.getElementById('proofBalance').textContent = `${d.balanceSol.toFixed(3)} SOL`;
+    document.getElementById('proofBalance').textContent = `${amount(d.balanceSol)} SOL`;
     document.getElementById('proofLink').href = d.cause.explorer;
 
     const rows = d.ledger.slice(0, 5);
@@ -89,7 +89,7 @@ async function readCause(tries = 4) {
       ? rows
           .map(
             (r) => `<tr>
-              <td class="dir ${r.kind === 'donation' ? 'in' : 'out'}">${r.kind === 'donation' ? 'IN' : 'OUT'}</td>
+              <td class="dir ${r.kind === 'donation' ? 'in' : 'out'}">${({donation:'IN',payout:'OUT',fee:'FEE','other-in':'OTHER IN','other-out':'OTHER OUT'})[r.kind]}</td>
               <td class="mono tnum">${amount(r.amountSol)}</td>
               <td><a class="sig mono" href="${r.explorer}" target="_blank" rel="noopener">${r.signature.slice(0, 10)}</a></td>
             </tr>`
@@ -99,6 +99,6 @@ async function readCause(tries = 4) {
   } catch (err) {
     badge.textContent = 'network unreachable';
     badge.className = 'badge fb';
-    rowsEl.innerHTML = `<tr><td colspan="3" class="muted" style="border-top:1px solid var(--line-soft)">${err.message}</td></tr>`;
+    rowsEl.textContent = 'Devnet is unavailable. Open the ledger to retry.';
   }
 })();

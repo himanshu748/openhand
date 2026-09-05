@@ -1,0 +1,109 @@
+{
+  "testedAt": "2026-09-05T13:54:01.892Z",
+  "scenario": "Automated acceptance test of fictional demo reviewer role",
+  "source": {
+    "id": "asha-demo-2026",
+    "title": "Asha Learning Grant — demo handbook",
+    "fictional": true,
+    "notice": "An authored, fictional handbook for testing this app. No real scholarship or application service is offered.",
+    "sections": [
+      {
+        "id": "S1",
+        "title": "§1 · Who this demonstration describes",
+        "text": "The fictional Asha Learning Grant supports first-year undergraduate students. This demonstration does not collect applications or decide anyone’s eligibility."
+      },
+      {
+        "id": "S2",
+        "title": "§2 · Provisional applications",
+        "text": "Students awaiting final results may apply with their latest available marksheet. Final results must be uploaded by 30 September 2026."
+      },
+      {
+        "id": "S3",
+        "title": "§3 · Documents",
+        "text": "The demo application checklist contains a latest available marksheet, an admission offer, and a one-page statement of study plans. Do not upload identity documents, bank details, or personal records to this demonstration."
+      },
+      {
+        "id": "S4",
+        "title": "§4 · Submission",
+        "text": "In this fictional example, the application and study statement are submitted together through the grant portal by 15 September 2026. There is no application fee. No real grant portal exists for this demonstration."
+      },
+      {
+        "id": "S5",
+        "title": "§5 · Review and clarification",
+        "text": "A human grant coordinator reviews applications. Receiving guidance does not guarantee an award. If the handbook does not answer a question, ask the coordinator instead of inventing a rule."
+      }
+    ]
+  },
+  "sourceVersion": "6f9c5ad4be602c62043fbea3df44003d33e86e01a3e1c437bffe3fdcd4f47d30",
+  "assessment": {
+    "status": "ready",
+    "claims": [
+      {
+        "text": "Students awaiting final results may apply using their latest available marksheet, provided they upload final results by 30 September 2026.",
+        "sectionId": "S2",
+        "quote": "Students awaiting final results may apply with their latest available marksheet. Final results must be uploaded by 30 September 2026.",
+        "title": "§2 · Provisional applications"
+      }
+    ],
+    "issues": [],
+    "followUp": "",
+    "source": "gemini",
+    "verification": "Citation excerpts match the handbook exactly. A human must still check meaning and completeness."
+  },
+  "review": {
+    "sessionId": "ae1c0821-1b97-4547-a76c-b433e66bbd9e",
+    "id": "cb10d5aa84b06d82dbab2f1ecebbca9dd65ca254ce94b2e374104e6942c8bd95",
+    "questionId": "provisional",
+    "language": "en",
+    "sourceVersion": "6f9c5ad4be602c62043fbea3df44003d33e86e01a3e1c437bffe3fdcd4f47d30",
+    "claims": [
+      {
+        "text": "Students awaiting final results may apply using their latest available marksheet, provided they upload final results by 30 September 2026.",
+        "sectionId": "S2",
+        "quote": "Students awaiting final results may apply with their latest available marksheet. Final results must be uploaded by 30 September 2026.",
+        "title": "§2 · Provisional applications"
+      }
+    ],
+    "reviewer": "Demo reviewer",
+    "reviewedAt": 1788616413475,
+    "reviewMode": "demo-role"
+  },
+  "payment": {
+    "lamports": 1000000,
+    "recipient": "E2F4s8Mj2Ypw7KdxX8rJtV1X2Y7qhZuuWEkPDjNb9FvP",
+    "payer": "39XuYz23dvGrZwVxLywKuXLhCHezMnQuF9jhLx3vS3ws",
+    "memo": "passiton:v1:cb10d5aa84b06d82dbab2f1ecebbca9dd65ca254ce94b2e374104e6942c8bd95",
+    "slot": 493571595,
+    "blockTime": 1788616429,
+    "signature": "5dufRyjkreVxLzKd9dqJpSuSmiHooLVyq2MmWUXHSN9PH9zckCGCWD5AkoDsPXFX7AG3BFnGu6pkQDeVP4pgcftX",
+    "explorer": "https://explorer.solana.com/tx/5dufRyjkreVxLzKd9dqJpSuSmiHooLVyq2MmWUXHSN9PH9zckCGCWD5AkoDsPXFX7AG3BFnGu6pkQDeVP4pgcftX?cluster=devnet"
+  },
+  "voice": {
+    "audioBytes": 154271,
+    "transcript": "Students awaiting final results may apply using their latest available mark sheet, provided they upload final results by 30th September 2026."
+  },
+  "storage": {
+    "source": "local",
+    "saved": false,
+    "reason": "Snowflake is not configured. This browser keeps the demo record."
+  },
+  "deploymentTested": "https://openhand-aqu4hiznh-himanshus-projects-acd54afd.vercel.app",
+  "productionCandidate": "https://openhand-lcbpwio9b-himanshus-projects-acd54afd.vercel.app",
+  "browserChecks": {
+    "hindiCorrectedContribution": "ready with two cited claims",
+    "reviewAcknowledgments": "disabled until both checked; approval completed",
+    "microphoneRecording": "not tested; server STT tested with generated sample audio",
+    "snowflake": "not configured; awaiting account sign-in"
+  },
+  "publicURL": "https://openhand-eta.vercel.app/app",
+  "publicVerification": {
+    "app": 200,
+    "index": 200,
+    "legacyLedger": 200,
+    "catalog": 200,
+    "questionSelector": "documents and provisional switched successfully",
+    "consoleErrors": 0,
+    "indexTitle": "Pass It On | Help once."
+  },
+  "productionDeployment": "https://openhand-ftx3kvjvi-himanshus-projects-acd54afd.vercel.app"
+}

@@ -1,0 +1,84 @@
+{
+  "testedAt": "2026-09-05T15:14:56.627Z",
+  "deployment": "https://openhand-4fpmuwn74-himanshus-projects-acd54afd.vercel.app",
+  "integrations": {
+    "gemini": "configured",
+    "elevenlabs": "configured",
+    "transcription": "configured",
+    "snowflake": "configured",
+    "solana": "devnet"
+  },
+  "freshRequest": {
+    "source": "snowflake",
+    "saved": true,
+    "statementHandle": "01c6deb2-0002-92a0-000e-9096000d10f2"
+  },
+  "replayedRequest": {
+    "source": "snowflake",
+    "saved": true,
+    "statementHandle": "01c6deb2-0002-92a2-000e-9096000d00c6"
+  },
+  "reviewSync": {
+    "source": "snowflake",
+    "saved": true,
+    "statementHandle": "01c6deb2-0002-9206-000e-9096000cc0ee"
+  },
+  "replayedReview": {
+    "source": "snowflake",
+    "saved": true,
+    "statementHandle": "01c6deb2-0002-9206-000e-9096000cc0f2"
+  },
+  "library": {
+    "source": "snowflake",
+    "answerCount": 1,
+    "statementHandle": "01c6deb2-0002-92a0-000e-9096000d10f6"
+  },
+  "coverage": {
+    "source": "snowflake",
+    "statementHandle": "01c6deb2-0002-92a2-000e-9096000d00ce",
+    "rows": [
+      {
+        "question_id": "provisional",
+        "language": "en",
+        "requests": 1,
+        "reviewed": 1,
+        "unmet_requests": 0
+      },
+      {
+        "question_id": "documents",
+        "language": "en",
+        "requests": 0,
+        "reviewed": 0,
+        "unmet_requests": 0
+      },
+      {
+        "question_id": "documents",
+        "language": "hi",
+        "requests": 0,
+        "reviewed": 0,
+        "unmet_requests": 0
+      },
+      {
+        "question_id": "provisional",
+        "language": "hi",
+        "requests": 0,
+        "reviewed": 0,
+        "unmet_requests": 0
+      },
+      {
+        "question_id": "submission",
+        "language": "en",
+        "requests": 0,
+        "reviewed": 0,
+        "unmet_requests": 0
+      },
+      {
+        "question_id": "submission",
+        "language": "hi",
+        "requests": 0,
+        "reviewed": 0,
+        "unmet_requests": 0
+      }
+    ]
+  }
+}

@@ -351,3 +351,18 @@ audio::-webkit-media-controls-panel { background: var(--bg-sink); }
   border-radius: 0 0 var(--r-control) 0; font-size: 14px; font-weight: 600;
 }
 .skip:focus { left: 0; }
+
+/* Evidence flow: use the existing tokens and keep long signatures contained. */
+[hidden] { display: none !important; }
+.table-wrap { overflow-x: auto; }
+.journey-row + .journey-row { border-top: 1px solid var(--line-soft); margin-top: 20px; padding-top: 20px; }
+.journey-row p { margin: 10px 0; line-height: 1.8; }
+.journey-row a { overflow-wrap: anywhere; }
+.evidence-list { padding-left: 20px; margin: 18px 0; }
+.evidence-list li { margin: 12px 0; line-height: 1.65; }
+.receipt-actions { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0; }
+#walletLine, #readStatus, #reconciliation, #claimResult { overflow-wrap:anywhere; }
+#reconciliation { padding:26px; }
+#journey .sig { display:inline-block; margin:4px 8px 4px 0; }
+:root { --ink-3: #9ba7b2; }
+@media (max-width:650px) { .table-wrap { padding:12px !important; } .ledger { min-width:600px; } .nav-links { display:none; } }

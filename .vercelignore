@@ -1,0 +1,14 @@
+.git
+.env*
+!.env.example
+data/keys.json
+data/seed-state.json
+data/txcache.json
+node_modules
+test
+scripts/seed.js
+
+docs/design
+
+design-qa.md
+docs/live-verification.json

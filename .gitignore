@@ -1,5 +1,9 @@
 node_modules/
-.env
+.env*
+!.env.example
 data/keys.json
 data/txcache.json
 public/receipts/
+.vercel/
+data/seed-state.json
+.vercel
