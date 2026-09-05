@@ -8,7 +8,7 @@ tags: devchallenge, weekendchallenge
 
 ## What I Built
 
-Pass It On lets a volunteer contribute an explanation, check it against a handbook, and leave a reviewed answer for the next person asking the same question. People can read or hear that answer in English or Hindi without connecting a wallet.
+Pass It On lets a volunteer contribute an explanation, check it against a handbook, and leave a reviewed answer for the next person asking the same question. People can read or hear that answer in English or Hindi. A sponsor can reward an approved contribution through a Solana payment linked to that answer.
 
 The contribution is the explanation. Someone who understands a confusing rule can give their time and knowledge, and the answer stays available beyond that conversation.
 
@@ -18,18 +18,13 @@ Visitors can try that reviewer role themselves. It is labelled as a demo role; a
 
 ## Demo
 
-[Open Pass It On](https://openhand-eta.vercel.app/app) or [start with the correction example](https://openhand-eta.vercel.app/app?example=correction).
+[Visit the hosted site](https://openhand-eta.vercel.app/) · [Open the app](https://openhand-eta.vercel.app/app) · [Try the correction example](https://openhand-eta.vercel.app/app?example=correction)
 
-Try this without a wallet:
+A volunteer explains a rule by speaking or typing. ElevenLabs reads the question, transcribes the spoken response, and voices the follow-up. Gemini compares the explanation with the handbook, flags mistakes, and returns supporting source excerpts. The volunteer can correct the answer and check it again before a person approves it in the labelled demo reviewer role.
 
-1. Select the provisional-application question and English or Hindi. Open Contribute and choose the incorrect example.
-2. Check the contribution. Read the correction request and compare it with the handbook.
-3. Use the corrected example and check again. Open Review, inspect the quoted source, and complete both acknowledgements.
-4. Return to Questions. Open the app in a separate browser session, select the same question and language, and read or listen to the shared answer.
+Snowflake stores the approved answer so another visitor can find it in the same language. That visitor can read the answer alongside its source or hear it through ElevenLabs. Snowflake also compares question requests with available reviewed answers, helping volunteers choose where to contribute next.
 
-The live audit completed this correction, review, storage, and retrieval flow, including spoken Hindi playback. Transcription was tested with generated sample audio; recording through an actual device microphone remains unverified.
-
-An optional sponsor step uses Solana devnet. [This finalized test transfer](https://explorer.solana.com/tx/5dufRyjkreVxLzKd9dqJpSuSmiHooLVyq2MmWUXHSN9PH9zckCGCWD5AkoDsPXFX7AG3BFnGu6pkQDeVP4pgcftX?cluster=devnet) paid 0.001 test SOL to the demo contributor. Its memo identifies the approved contribution. Test SOL has no monetary value.
+A sponsor can then reward the approved contribution through Solana. The demo has already completed [a finalized transfer of 0.001 devnet SOL](https://explorer.solana.com/tx/5dufRyjkreVxLzKd9dqJpSuSmiHooLVyq2MmWUXHSN9PH9zckCGCWD5AkoDsPXFX7AG3BFnGu6pkQDeVP4pgcftX?cluster=devnet). Its memo identifies the approved contribution, and the app verifies the sender, recipient, amount, and memo before marking the payment complete. Devnet SOL is test currency with no monetary value. Contributing and reading remain available whether or not a sponsor funds the answer.
 
 ## Code
 
@@ -37,13 +32,13 @@ An optional sponsor step uses Solana devnet. [This finalized test transfer](http
 
 The repository still has its original name, Openhand. The first version was a giving ledger; Pass It On became the main experience during this challenge. The ledger remains at `/ledger`.
 
-[The usability audit](https://github.com/himanshu748/openhand/blob/main/design-qa.md) records the live checks and fixes. [Snowflake evidence](https://github.com/himanshu748/openhand/blob/main/docs/snowflake-live-verification.json) records successful persistence, repeat-request handling, and shared-answer retrieval. The current automated suite has 32 passing tests. Those tests use injected providers; live-provider checks are recorded separately.
+The repository includes [testing notes and known limits](https://github.com/himanshu748/openhand/blob/main/design-qa.md), [Snowflake verification](https://github.com/himanshu748/openhand/blob/main/docs/snowflake-live-verification.json), and [live shared-answer playback evidence](https://github.com/himanshu748/openhand/blob/main/docs/publication-live-verification.json). The 32 automated tests use injected providers; the notes distinguish those results from live service checks, including the outstanding device-microphone test.
 
 ## How I Built It
 
 I kept the app small: Express on Node.js, browser JavaScript, and a Vercel deployment. Claude and Codex helped with implementation, UI changes, testing, and writing.
 
-ElevenLabs handles the spoken exchange. It reads the question, transcribes a recorded response, and speaks the follow-up that Gemini produces. A contributor can edit the transcript before checking it. Readers can also listen to a reviewed answer. This uses speech and transcription APIs in a custom interview loop.
+ElevenLabs handles the spoken exchange. It reads the question, transcribes a recorded response, and speaks the follow-up that Gemini produces. A contributor can edit the transcript and check the revised answer again. Readers can also listen to a reviewed answer. This uses speech and transcription APIs in a custom interview loop.
 
 Gemini compares the explanation with the supplied handbook and returns claims, supporting quotes, or a request for correction. The server checks that each quote occurs in the source. That catches invented excerpts, but it cannot establish that every interpretation is correct. Human review remains a separate step.
 
@@ -57,4 +52,4 @@ Before a real community pilot, the app needs authenticated independent reviewers
 
 ## Prize Categories
 
-Best Use of Google AI, Best Use of ElevenLabs, Best Use of Snowflake, and Best Use of Solana. Their roles are source checking, spoken contribution and playback, shared answers and demand analysis, and optional devnet sponsor payments.
+Best Use of Google AI, Best Use of ElevenLabs, Best Use of Snowflake, and Best Use of Solana. Their roles are source checking, spoken contribution and playback, shared answers and demand analysis, and contribution-linked devnet sponsor payments.
