@@ -129,7 +129,7 @@ header{min-height:76px}.intro{min-height:0;padding-block:14px 27px}.intro h1{fon
   font-size:16px;line-height:1.7;
 }
 .source-panel h4{
-  font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:0;
+  font-family:var(--sans);font-size:16px;font-weight:600;line-height:1.4;letter-spacing:0;
   text-transform:none;color:var(--ink);margin:0 0 9px;
 }
 
@@ -190,3 +190,5 @@ header{min-height:76px}.intro{min-height:0;padding-block:14px 27px}.intro h1{fon
   .steps button[aria-current=step]::after{right:0}
   .step-notice{margin:16px 20px 0}
 }
+
+.source-section h3{font-family:var(--sans);font-size:18px;font-weight:600;line-height:1.4;letter-spacing:0}

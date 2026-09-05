@@ -20,3 +20,8 @@ export function initialMode(saved = {}) {
   if (saved.mode) return saved.mode;
   return saved.records && Object.keys(saved.records).length ? 'contribute' : 'ask';
 }
+
+// Format legacy handbook headings for display without changing signed source data.
+export function sectionTitle(title) {
+  return String(title ?? '').replace(/^§(\d+)\s*[·.]?\s*/, 'Section $1 · ');
+}
