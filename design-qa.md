@@ -103,3 +103,14 @@ One suspected bug was investigated and dismissed: an answer still shown after sw
 Actual microphone capture. It needs a permission grant on a real device and was not exercised, so the recorded-interview path remains unproven end to end. Transcription is configured and the TTS half of the loop is verified.
 
 Proof expiry after seven days was not observed in real time. It is covered by existing tamper and expiry tests only.
+
+
+## Published-answer lifetime fix, 5 September 2026
+
+Previously, the shared library verified stored reviews as though a reader were requesting a new action. That removed published answers after seven days. The library now verifies the signature of an already-persisted review and checks question, language, and current source version. It returns a separate one-hour reading token for playback. Payment preparation and review sync still require a valid, unexpired, session-bound review token. No new Solana payment was needed for this change.
+
+Playback refreshes the shared reading token, and the browser renews an expired anonymous session once. Existing drafts and pending payment records survive that renewal; renewal does not transfer ownership of old action proofs.
+
+The automated suite passes 32 tests, including a 40-day clock advance, rejection of tampered/stale-source/wrong-topic/wrong-kind records, playback after action expiry, playback-token refresh, and rejection of expired or read-only proofs by payment and sync endpoints. Syntax checks pass. These time-shifted tests use injected providers, not the production clock. Actual device microphone recording remains pending the user's sample.
+
+The protected production candidate also returned a real Snowflake Hindi answer and ElevenLabs playback (about 196 KB). Its reading token was rejected by payment preparation, and an invalid session returned the expected renewal signal. See `docs/publication-live-verification.json`. No new payment was sent.

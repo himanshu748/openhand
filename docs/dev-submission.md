@@ -37,7 +37,7 @@ An optional sponsor step uses Solana devnet. [This finalized test transfer](http
 
 The repository still has its original name, Openhand. The first version was a giving ledger; Pass It On became the main experience during this challenge. The ledger remains at `/ledger`.
 
-[The usability audit](https://github.com/himanshu748/openhand/blob/main/design-qa.md) records the live checks and fixes. [Snowflake evidence](https://github.com/himanshu748/openhand/blob/main/docs/snowflake-live-verification.json) records successful persistence, repeat-request handling, and shared-answer retrieval. The current automated suite has 30 passing tests. Those tests use injected providers; live-provider checks are recorded separately.
+[The usability audit](https://github.com/himanshu748/openhand/blob/main/design-qa.md) records the live checks and fixes. [Snowflake evidence](https://github.com/himanshu748/openhand/blob/main/docs/snowflake-live-verification.json) records successful persistence, repeat-request handling, and shared-answer retrieval. The current automated suite has 32 passing tests. Those tests use injected providers; live-provider checks are recorded separately.
 
 ## How I Built It
 
@@ -53,7 +53,7 @@ Solana gives a sponsor a contribution-linked payment record. Before marking a bo
 
 Several usability fixes came from testing the next visitor's experience. First visits now open on Questions so existing answers are visible. Refreshing restores the current stage. After approval, the app explains that sharing is complete and labels the bounty optional.
 
-Before a real community pilot, the app needs authenticated independent reviewers, correction and removal tools, and durable abuse controls. Shared review proofs currently expire after seven days. I have not measured adoption or the number of people this would help.
+Before a real community pilot, the app needs authenticated independent reviewers, correction and removal tools, and durable abuse controls. Published answers remain available while their source version matches. Review and payment authorization still expires after seven days; playback uses a separate, short-lived token. I have not measured adoption or the number of people this would help.
 
 ## Prize Categories
 

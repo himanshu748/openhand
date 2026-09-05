@@ -1,0 +1,19 @@
+{
+  "testedAt": "2026-09-05T17:27:17.570907+00:00",
+  "deployment": "https://openhand-flj2fkpzr-himanshus-projects-acd54afd.vercel.app",
+  "source": "snowflake",
+  "answerCount": 1,
+  "statementHandle": "01c6df36-0002-9206-000e-9096000cc12e",
+  "playbackSource": "elevenlabs",
+  "audioBytesApprox": 196485,
+  "readingTokenRejectedForPayment": true,
+  "invalidSessionRenewalSignal": true,
+  "newPaymentSent": false,
+  "clockAdvanceTest": {
+    "days": 40,
+    "providerMode": "injected",
+    "publishedReadAndPlayback": true,
+    "expiredAuthorizationRejectedForPaymentAndSync": true
+  },
+  "deviceMicrophone": "pending user sample"
+}

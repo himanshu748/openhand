@@ -47,7 +47,7 @@ The tests cover integer accounting and existing ledger behavior, exact source ex
 
 - `GOOGLE_API_KEY`, `GOOGLE_MODEL` (verified deployment model: `gemini-3.6-flash`). Free-tier quotas still apply.
 - `ELEVENLABS_API_KEY` with Text to Speech and Speech to Text access; `ELEVENLABS_STT_ENABLED=true` only after scope configuration. Optional `ELEVENLABS_VOICE_ID` and `ELEVENLABS_MODEL`.
-- `PASSITON_SIGNING_KEY`: independent random secret, at least 32 bytes, required on Vercel. Review evidence expires after seven days. Local development uses a process-local key; restarting invalidates local proofs.
+- `PASSITON_SIGNING_KEY`: independent random secret, at least 32 bytes, required on Vercel. Review authorization expires after seven days for sync and payment preparation. Already-published Snowflake answers remain readable while their signatures and current source version match. Playback uses a separate one-hour reading token that cannot authorize sync or payment. Local development uses a process-local key; restarting invalidates local proofs.
 - `SOLANA_RPC_URL`: optional devnet RPC. The genesis hash is checked before payment operations. Never configure this demo for mainnet.
 - Snowflake: `SNOWFLAKE_ACCOUNT`, `SNOWFLAKE_JWT_ACCOUNT` (account identifier in JWT), `SNOWFLAKE_USER`, `SNOWFLAKE_PRIVATE_KEY`, `SNOWFLAKE_DATABASE=PASSITON`, `SNOWFLAKE_SCHEMA=PUBLIC`, `SNOWFLAKE_WAREHOUSE=PASSITON_WH`, `SNOWFLAKE_ROLE=PASSITON_APP`. Alternatively a scoped `SNOWFLAKE_TOKEN` can use PAT auth under the account’s network-policy requirements.
 

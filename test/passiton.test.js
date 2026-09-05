@@ -42,7 +42,7 @@ test('HTTP contribution loop rejects failed checks, missing human confirmation a
  const post=(path,body,session)=>fetch(base+path,{method:'POST',headers:{'content-type':'application/json',...(session?{'X-Passiton-Session':session}:{})},body:JSON.stringify(body)});
  try{
  const session=(await (await post('/session',{})).json()).token;
- assert.equal((await post('/check',{questionId:'provisional',language:'en',text:'A sample answer'})).status,400);
+ assert.equal((await post('/check',{questionId:'provisional',language:'en',text:'A sample answer'})).status,401);
  const bad=await (await post('/check',{questionId:'provisional',language:'en',text:'An intentionally wrong answer'},session)).json();
  assert.equal((await post('/review',{checkToken:bad.checkToken,confirmedSource:true,confirmedDemo:true},session)).status,409);
  const checked=await (await post('/check',{questionId:'provisional',language:'en',text:'Apply with your latest available marksheet and upload final results by 30 September 2026.'},session)).json();
