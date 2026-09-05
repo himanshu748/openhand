@@ -11,5 +11,5 @@ export async function api(path,body,raw){
 }
 export const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const $=id=>document.getElementById(id);
-export function notice(text,error=false){$('stepNotice').textContent=text;$('stepNotice').hidden=!text;$('stepNotice').classList.toggle('error',error);}
+export function notice(text,error=false,done=false){const n=$('stepNotice');n.textContent=text;n.hidden=!text;n.classList.toggle('error',error);n.classList.toggle('done',done&&!error);}
 export function storageNotice(storage){state.providers.snowflake=storage?.saved?'live':storage?.source==='snowflake'?'unavailable':'not configured';return storage?.saved?'Saved to Snowflake.':storage?.reason||'Saved in this browser.';}

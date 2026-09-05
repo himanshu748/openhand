@@ -13,3 +13,180 @@ header{min-height:76px}.intro{min-height:0;padding-block:14px 27px}.intro h1{fon
 .workspace h2,.workspace h3,.workspace h4,.secondary h2,dialog h2,dialog h3,.feedback h4,.principle{font-family:var(--sans);font-weight:550;letter-spacing:-.025em}
 .source-panel blockquote,.claim blockquote{font-family:var(--sans);font-size:17px;line-height:1.7;letter-spacing:0;font-weight:400}
 .source-panel h4{font-size:17px;letter-spacing:0}.question-rail h2{font-size:21px;line-height:1.4}.work-heading h2{font-size:26px;line-height:1.3}.panel h3{font-size:22px;line-height:1.3}.principle{font-size:18px;letter-spacing:0;font-weight:400}
+
+/* ============================================================
+   UX pass. Progress, source comparison, feedback and mobile.
+   Appended so the existing paper-and-ink language is preserved
+   and only specific behaviours are corrected.
+   ============================================================ */
+
+/* --- Intro: say what happens, not just a slogan ------------- */
+.intro{padding-block:22px 0}
+.intro-copy{max-width:62ch}
+.intro h1{font-size:clamp(31px,3.2vw,44px);letter-spacing:-1px;line-height:1.12}
+.intro p{font-size:17px;line-height:1.6;color:#54605a;margin-top:12px;max-width:62ch}
+
+.intro-loop{
+  list-style:none;margin:22px 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;
+  border-top:1px solid var(--rule);
+}
+.intro-loop li{
+  padding:14px 20px 16px;border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;gap:4px;position:relative;
+}
+.intro-loop li:last-child{border-right:0}
+.intro-loop b{font-weight:550;font-size:15px;letter-spacing:-.01em}
+.intro-loop span{font-size:13.5px;line-height:1.5;color:var(--muted)}
+.intro-loop li::before{
+  content:'';position:absolute;left:0;top:-1px;width:100%;height:2px;background:var(--green);
+  transform:scaleX(0);transform-origin:left;
+}
+.intro-loop li:first-child::before{transform:scaleX(1)}
+
+/* --- Stepper: one visible progression, not two ------------- */
+.steps{
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:0 38px;margin-bottom:0;gap:0;justify-content:flex-start;
+  background:rgba(255,255,255,.4);
+}
+.steps button{
+  flex:1;justify-content:flex-start;gap:11px;padding:15px 0;
+  font-size:15px;color:var(--muted);position:relative;min-height:56px;
+}
+.steps button[aria-current=step]{color:var(--ink);font-weight:550}
+.steps button[aria-current=step]::after{
+  content:'';position:absolute;left:0;right:14px;bottom:-1px;height:2px;background:var(--green);
+}
+.steps button.complete{color:var(--ink)}
+.steps button span{
+  flex:none;border-color:#aab4ac;color:var(--muted);font-variant-numeric:tabular-nums;
+}
+.steps button[aria-current=step] span{border-color:var(--green);color:#fff;background:var(--green)}
+.steps button.complete span{
+  background:var(--green);border-color:var(--green);color:transparent;position:relative;
+}
+/* A tick, so completion is not carried by colour alone. */
+.steps button.complete span::after{
+  content:'';position:absolute;left:10px;top:8px;width:7px;height:12px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg);
+}
+.step-arrow{display:none}
+
+/* --- Feedback: put it where the work is -------------------- */
+.step-notice{
+  margin:20px 38px 0;padding:14px 17px;border-radius:4px;
+  display:flex;gap:11px;align-items:flex-start;font-size:15px;line-height:1.5;
+}
+.step-notice::before{
+  content:'';flex:none;width:16px;height:16px;margin-top:2px;border-radius:50%;
+  border:2px solid var(--green);border-top-color:transparent;
+}
+.step-notice.error::before{
+  border:0;border-radius:0;width:3px;height:16px;background:var(--warn);margin-top:1px;
+}
+@media(prefers-reduced-motion:no-preference){
+  .step-notice::before{animation:pio-spin .9s linear infinite}
+  .step-notice.error::before,.step-notice.done::before{animation:none}
+}
+@keyframes pio-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+  .step-notice::before{border:0;background:var(--green);width:10px;height:10px;margin-top:5px}
+  .step-notice.error::before{background:var(--warn);width:3px;height:16px;margin-top:1px}
+  .step-notice.done::before{background:none;border-right:2px solid var(--green);border-bottom:2px solid var(--green)}
+}
+.step-notice.done::before{
+  border:0;border-radius:0;width:9px;height:15px;margin:1px 4px 0 3px;
+  border-right:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(43deg);
+}
+
+/* --- Source comparison: pair the claim with its excerpt ----- */
+.claim{
+  border:1px solid var(--rule);border-left:3px solid var(--green);
+  border-radius:0 4px 4px 0;padding:16px 18px;margin-bottom:12px;background:rgba(255,255,255,.45);
+}
+.claim:last-child{margin-bottom:0}
+.claim p{font-size:16px;line-height:1.6}
+.claim details{margin-top:10px}
+.claim summary{
+  font-size:13px;color:var(--green);padding:6px 0;min-height:34px;
+  display:flex;align-items:center;gap:7px;
+}
+.claim summary::before{content:'▸';font-size:11px;transition:none}
+.claim details[open] summary::before{content:'▾'}
+.claim blockquote{
+  margin:8px 0 4px;padding:12px 14px;background:#eef1ea;border-radius:3px;
+  font-size:15.5px;line-height:1.65;color:#33443a;
+}
+.claim details[open] blockquote::before{
+  content:'From the handbook';display:block;font-size:12.5px;letter-spacing:0;
+  color:var(--muted);margin-bottom:7px;font-weight:600;
+}
+
+/* Source panel headings and quotes stay sans, per the reading correction. */
+.source-panel blockquote{
+  padding:14px 16px;background:#eef1ea;border-radius:3px;margin-bottom:18px;
+  font-size:16px;line-height:1.7;
+}
+.source-panel h4{
+  font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:0;
+  text-transform:none;color:var(--ink);margin:0 0 9px;
+}
+
+/* --- Empty and loading states ------------------------------ */
+.coverage-empty{
+  padding:26px 0;color:var(--muted);font-size:15px;line-height:1.6;
+}
+#coverageStatus{font-size:14px}
+
+/* --- Focus: visible on every interactive surface ----------- */
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:2px}
+.question-row:focus-visible{outline-offset:-2px}
+.steps button:focus-visible{outline-offset:-3px}
+
+/* --- Tablet ------------------------------------------------ */
+@media(max-width:1050px){
+  .intro-loop{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .intro-loop li:nth-child(2){border-right:0}
+  .intro-loop li:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+}
+
+/* --- Phone ------------------------------------------------- */
+@media(max-width:720px){
+  /* The work must be reachable without a long scroll. */
+  .intro{padding:16px 20px 0}
+  .intro h1{font-size:27px;letter-spacing:-.6px}
+  .intro p{font-size:15.5px;margin-top:9px}
+  .intro-loop{
+    grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:max-content;
+    overflow-x:auto;margin-top:12px;gap:0;border-bottom:1px solid var(--rule);
+    scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  .intro-loop::-webkit-scrollbar{display:none}
+  .intro-loop li{padding:9px 14px;border-bottom:0;flex-direction:row;align-items:center;gap:7px}
+  .intro-loop li:nth-child(2){border-right:1px solid var(--rule)}
+  .intro-loop li span{display:none}
+  .intro-loop b{font-size:13.5px;white-space:nowrap;color:var(--muted);font-weight:500}
+  .intro-loop li:first-child b{color:var(--ink);font-weight:600}
+  .intro h1{font-size:25px}
+  .intro p{font-size:15px;line-height:1.55}
+  .intro{padding:13px 20px 0}
+
+  .work-heading{padding:14px 20px 12px;gap:10px}
+  .work-heading h2{font-size:19px;line-height:1.35;flex-basis:100%}
+  .work-heading select{min-height:44px}
+  .status{font-size:13px}
+
+  .steps{
+    padding:0 20px;overflow-x:auto;gap:20px;
+    scrollbar-width:none;position:sticky;top:0;z-index:4;
+    background:var(--paper);border-bottom:1px solid var(--rule);
+  }
+  .steps::-webkit-scrollbar{display:none}
+  .steps button{
+    flex:0 0 auto;flex-direction:row;gap:8px;font-size:14px;
+    padding:13px 0;min-height:52px;white-space:nowrap;
+  }
+  .steps button[aria-current=step]::after{right:0}
+  .step-notice{margin:16px 20px 0}
+}
