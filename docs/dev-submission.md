@@ -1,6 +1,6 @@
 ---
-title: Pass It On: give someone an answer they can pass on
-published: false
+title: "Pass It On: donate an explanation someone else can use"
+published: true
 tags: devchallenge, weekendchallenge
 ---
 
@@ -8,48 +8,59 @@ tags: devchallenge, weekendchallenge
 
 ## What I Built
 
-Pass It On lets a volunteer contribute an explanation, check it against a handbook, and leave a reviewed answer for the next person asking the same question. People can read or hear that answer in English or Hindi. A sponsor can reward an approved contribution through a Solana payment linked to that answer.
+Pass It On lets you donate an explanation. Speak or type what a handbook means, correct it against the source, and leave a reviewed answer that someone else can read, hear, or save.
 
-The contribution is the explanation. Someone who understands a confusing rule can give their time and knowledge, and the answer stays available beyond that conversation.
+I built this around giving knowledge and time. A useful explanation should remain available when the next person asks the same question. The source needs to travel with it, too.
 
-The demo uses a fictional scholarship handbook. One question asks whether a student can apply before their final results arrive. The deliberately wrong example says they must wait and gives the wrong deadline. Gemini flags both mistakes, asks for a correction, and attaches source excerpts to the revised answer. A person then compares those claims with the handbook before sharing it.
+The public demo uses a fictional scholarship handbook. Its clearest example is a student asking, “Can I apply before my final results?” A volunteer explains the rule, Gemini checks it, and a person compares the resulting claims with the handbook. The next visitor can open that answer directly in English or Hindi. ElevenLabs reads it aloud. A downloadable copy keeps the answer and its supporting quotes together.
 
-Visitors can try that reviewer role themselves. It is labelled as a demo role; approval does not imply an independent expert checked the answer. The scholarship is fictional, and the app does not accept real applications.
+My proposed first pilot is a student club or volunteer group answering repeated questions about one of its guides. The live demo does not yet accept a group's own handbook, and I have not measured adoption. The contribution, correction, shared retrieval, speech, and devnet payment flows are implemented.
 
 ## Demo
 
-[Visit the hosted site](https://pass-it-on-himanshu.vercel.app/) · [Open the app](https://pass-it-on-himanshu.vercel.app/app) · [Try the correction example](https://pass-it-on-himanshu.vercel.app/app?example=correction)
+[![Pass It On workspace showing an answer alongside its supporting handbook.](https://raw.githubusercontent.com/himanshu748/pass-it-on/main/docs/design/shared-answer-live.png)](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=hi)
 
-A volunteer explains a rule by speaking or typing. ElevenLabs reads the question, transcribes the spoken response, and voices the follow-up. Gemini compares the explanation with the handbook, flags mistakes, and returns supporting source excerpts. The volunteer can correct the answer and check it again before a person approves it in the labelled demo reviewer role.
+[Read the shared Hindi answer](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=hi) · [Read it in English](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=en) · [Open the website](https://pass-it-on-himanshu.vercel.app/)
 
-Snowflake stores the approved answer so another visitor can find it in the same language. That visitor can read the answer alongside its source or hear it through ElevenLabs. Snowflake also compares question requests with available reviewed answers, helping volunteers choose where to contribute next.
+Start with the answer. Open a supporting excerpt, then select **Listen to this answer**. **Copy question link** sends the next reader to the same question and language. **Save answer** downloads the explanation, exact quotes, review date, source version, and return link for offline reading. The saved copy says that it does not update.
 
-A sponsor can then reward the approved contribution through Solana. The demo has already completed [a finalized transfer of 0.001 devnet SOL](https://explorer.solana.com/tx/5dufRyjkreVxLzKd9dqJpSuSmiHooLVyq2MmWUXHSN9PH9zckCGCWD5AkoDsPXFX7AG3BFnGu6pkQDeVP4pgcftX?cluster=devnet). Its memo identifies the approved contribution, and the app verifies the sender, recipient, amount, and memo before marking the payment complete. Devnet SOL is test currency with no monetary value. Contributing and reading remain available whether or not a sponsor funds the answer.
+Then [try contributing](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=en&example=correction):
+
+1. Check the deliberately incorrect example. It says students must wait for final results and gives the wrong deadline. Gemini should flag both claims and ask for a correction.
+2. Use the corrected example and check again. Open **Review**, compare the claims with the quoted source, and complete both acknowledgements.
+3. Return to **Questions**. Pass its link to a separate browser session and retrieve the shared answer there.
+
+You can also start a spoken interview: hear the question, consent to recording, speak your response, and edit the transcript before continuing. ElevenLabs handles transcription and speech; Gemini checks the explanation and writes the follow-up.
+
+The sponsor step works on Solana devnet. [This finalized transfer paid 0.001 test SOL](https://explorer.solana.com/tx/5dufRyjkreVxLzKd9dqJpSuSmiHooLVyq2MmWUXHSN9PH9zckCGCWD5AkoDsPXFX7AG3BFnGu6pkQDeVP4pgcftX?cluster=devnet) to the demo contributor. Its memo identifies the approved contribution. Test SOL has no monetary value. People can contribute and reuse answers whether or not a sponsor pays the bounty.
+
+The handbook is fictional. Visitors can try the clearly labelled demo reviewer role; that is not independently authenticated review or a real scholarship service.
 
 ## Code
 
-[GitHub repository](https://github.com/himanshu748/pass-it-on)
+[GitHub repository](https://github.com/himanshu748/pass-it-on) · [Verification and known limits](https://github.com/himanshu748/pass-it-on/blob/main/docs/reuse-verification.md)
 
-The project began as Openhand, a giving ledger, and became Pass It On during this challenge. The earlier ledger remains at `/ledger`.
-
-The repository includes [testing notes and known limits](https://github.com/himanshu748/pass-it-on/blob/main/design-qa.md), [Snowflake verification](https://github.com/himanshu748/pass-it-on/blob/main/docs/snowflake-live-verification.json), and [live shared-answer playback evidence](https://github.com/himanshu748/pass-it-on/blob/main/docs/publication-live-verification.json). The 32 automated tests use injected providers; the notes distinguish those results from live service checks, with device recording confirmed by the project owner.
+The project began as Openhand, a giving ledger, and became Pass It On during this challenge. The earlier ledger remains at `/ledger`. I used Express, browser JavaScript, and Vercel. Claude and Codex helped with implementation, design, testing, and writing.
 
 ## How I Built It
 
-I kept the app small: Express on Node.js, browser JavaScript, and a Vercel deployment. Claude and Codex helped with implementation, UI changes, testing, and writing.
+Each technology handles a specific part of the exchange:
 
-ElevenLabs handles the spoken exchange. It reads the question, transcribes a recorded response, and speaks the follow-up that Gemini produces. A contributor can edit the transcript and check the revised answer again. Readers can also listen to a reviewed answer. This uses speech and transcription APIs in a custom interview loop.
+| Technology | What it does for the person using the app |
+| --- | --- |
+| ElevenLabs | Lets a volunteer speak an explanation and a reader hear an answer. It also voices the correction question, so the interview can continue aloud. |
+| Google AI / Gemini | Compares the explanation with the handbook, flags contradictions, and asks for corrections. It returns claims paired with exact source excerpts. |
+| Snowflake | Stores approved answers for other sessions and joins question requests with reviewed answers by language and source version. Volunteers can see which questions still need an explanation. |
+| Solana | Links a sponsor's devnet payment to a particular contribution through the transaction memo. The server verifies finalization, sender, recipient, and amount before marking it paid. |
 
-Gemini compares the explanation with the supplied handbook and returns claims, supporting quotes, or a request for correction. The server checks that each quote occurs in the source. That catches invented excerpts, but it cannot establish that every interpretation is correct. Human review remains a separate step.
+I kept the source check and human review separate. The server rejects quotes that do not occur in the handbook. That catches invented excerpts, but an exact quote can still be interpreted badly. A successful AI check therefore opens review; it cannot approve an answer or authorize a payment by itself.
 
-Snowflake stores anonymous question activity and approved demo answers. Its coverage query joins demand with reviewed answers by question, language, and source version. That gives volunteers a way to choose an unanswered question in the language people requested. Another session can retrieve a stored answer after the server verifies its signed review. Counts describe demo activity, not verified people helped.
+The next reader's experience drove the latest changes. First visits open on available answers. A direct link selects the question and language. Saved handouts carry their source and limitations. Shared links contain no session, review, or payment credentials. Hindi answer text and English source excerpts have separate language labels for assistive technology.
 
-Solana gives a sponsor a contribution-linked payment record. Before marking a bounty paid, the server checks finalization, sender, recipient, amount, and memo. The current demo uses a fixed recipient and a direct devnet transfer. It does not implement escrow or prevent every concurrent-payment race.
+The test suite covers proof tampering and expiry, review gates, provider failures, exact payment matching, and the sharing/export boundaries. Live checks separately exercised Gemini, Snowflake retrieval, and Hindi audio playback. The project owner confirmed microphone recording; the earlier automated transcription check used generated sample audio.
 
-Several usability fixes came from testing the next visitor's experience. First visits now open on Questions so existing answers are visible. Refreshing restores the current stage. After approval, the app explains that sharing is complete and labels the bounty optional.
-
-Before a real community pilot, the app needs authenticated independent reviewers, correction and removal tools, and durable abuse controls. Published answers remain available while their source version matches. Review and payment authorization still expires after seven days; playback uses a separate, short-lived token. I have not measured adoption or the number of people this would help.
+A real group pilot still needs its own source collection, authenticated reviewers, correction and removal tools, and durable abuse controls. The current bounty uses a fixed devnet recipient and a direct transfer; it is not escrow and does not guarantee exactly-once payment across simultaneous sponsors. The next useful test is one group, one real guide, and a second person finding an answer without the original volunteer present.
 
 ## Prize Categories
 
-Best Use of Google AI, Best Use of ElevenLabs, Best Use of Snowflake, and Best Use of Solana. Their roles are source checking, spoken contribution and playback, shared answers and demand analysis, and contribution-linked devnet sponsor payments.
+Best Use of Google AI, Best Use of ElevenLabs, Best Use of Snowflake, and Best Use of Solana.
