@@ -7,3 +7,5 @@ public/receipts/
 .vercel/
 data/seed-state.json
 .vercel
+
+.impeccable/review/
