@@ -6,7 +6,15 @@ Pass It On lets a volunteer leave an explanation that the next person can read o
 
 This replaces Openhand’s original donation-ledger front page. The earlier ledger is still available at `/ledger`; its implementation history is in [docs/ledger-history.md](docs/ledger-history.md).
 
-## The demonstration
+## Start with a real guide
+
+The default app helps someone make their first open-source contribution, using [GitHub’s Open Source Guides](https://opensource.guide/how-to-contribute/) under CC BY 4.0. Read or hear answers about contributing without code, checking contribution instructions, and preparing a pull request. [Source attribution and collection boundaries](docs/open-source-guide.md).
+
+English and Hindi prepared answers are labelled as Pass It On adaptations. They do not count as community reviews. Readers can ask Gemini follow-ups, contribute their own explanation, compare it with the source, and try the demo reviewer role. Shared answers and demand remain scoped to this source in Snowflake. Sponsor payments remain on Solana devnet.
+
+[Open the real guide](https://pass-it-on-himanshu.vercel.app/app?collection=open-source) · [Practice the fictional correction loop](https://pass-it-on-himanshu.vercel.app/app?collection=practice&question=provisional&language=en&example=correction)
+
+## The fictional practice collection
 
 The Asha Learning Grant handbook is **fictional, authored demo material**. There is no real scholarship, application portal, eligibility decision, or cash bounty. Review is an explicitly labelled demo role that visitors can try; it is not independently authenticated review.
 
@@ -63,9 +71,9 @@ Production Snowflake was connected and verified on 5 September 2026. The dedicat
 
 [lib/passiton/warehouse.js](lib/passiton/warehouse.js) contains the production query. User values use bind parameters. Only aggregate coverage and verified approved demo answers are returned to visitors; raw volunteer recordings are not retained by the app.
 
-## Limits before any real deployment
+## Limits before organizational deployment
 
-This is a hackathon demo, not a scholarship or financial service. A real community deployment needs authenticated independent reviewers, consent/moderation and deletion workflows for published contributions, durable distributed rate limits, production payment/account controls, and a sustainable provider quota. The current app has per-instance request limits and a fixed devnet recipient. Direct sponsor transfers are not atomic bounty claims: two simultaneous sponsors could both pay; the demo does not claim escrow or exactly-once settlement.
+The open-source guide is real public material. Reviewer identity and sponsor payments are demonstration features; the practice collection is not a scholarship service. A real community deployment needs authenticated independent reviewers, consent/moderation and deletion workflows for published contributions, durable distributed rate limits, production payment/account controls, and a sustainable provider quota. The current app has per-instance request limits and a fixed devnet recipient. Direct sponsor transfers are not atomic bounty claims: two simultaneous sponsors could both pay; the demo does not claim escrow or exactly-once settlement.
 
 Do not enter private applicant records. Recordings are sent to ElevenLabs only after the visitor opts into the recording flow; transcripts and typed text are sent to Google AI for checking. If Snowflake is connected, review acknowledgements authorize sharing the fictional approved answer in the demo collection. Local browser records survive refresh; no real identity is verified.
 

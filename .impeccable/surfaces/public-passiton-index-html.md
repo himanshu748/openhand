@@ -20,3 +20,7 @@ Evidence: finish reviewer reported SHIP; 32 existing tests passed. Review screen
 ## Answer reuse
 
 Shared reviewed answers include Copy question link and Save answer beside voice playback. Public links select question/language and enter reading mode without changing stored contributions. UTF-8 handouts keep source excerpts, demo status, review date and source version. Clipboard denial opens a labelled, selectable link in a native dialog.
+
+## Real guide collection
+
+A labelled collection selector switches between the real Open Source Guides collection and fictional grant practice. Source attribution, license, checked date and pinned revision appear beside the excerpts. Starter explanations are labelled separately from community reviews. On mobile the decorative introduction is hidden to bring guidance into view sooner.

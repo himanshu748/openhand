@@ -2,10 +2,11 @@ import {sectionTitle} from './labels.js';
 
 // Only public navigation belongs in a shared URL. Never include local proofs,
 // transcripts, session tokens or a sponsor's wallet details.
-export function questionLink(origin, questionId, language) {
+export function questionLink(origin, questionId, language, collection) {
   const url = new URL('/app', origin);
   url.searchParams.set('question', questionId);
   url.searchParams.set('language', language);
+  if(collection==='open-source')url.searchParams.set('collection',collection);
   return url.href;
 }
 
@@ -21,13 +22,14 @@ export function entryFromLink(search, catalog) {
 }
 
 export function answerHandout({question, language, languageName, answer, source, sourceVersion, url}) {
-  const reviewDate = new Date(answer.reviewedAt).toISOString().slice(0, 10);
+  const starter=answer.kind==='starter';
+  const reviewDate = starter?answer.preparedAt:new Date(answer.reviewedAt).toISOString().slice(0, 10);
   return [
     'PASS IT ON', question.title, `Answer language: ${languageName} (${language})`, '',
-    'FICTIONAL DEMO. This is not a real scholarship or application service.',
-    'Checked in the demo reviewer role, not independently verified.', '',
+    source.fictional?'FICTIONAL DEMO. This is not a real scholarship or application service.':'Based on a real public guide. Check the target project’s own instructions.',
+    starter?'Prepared starter answer. Adapted by Pass It On; not independently reviewed.':'Checked in the demo reviewer role, not independently verified.', '',
     ...answer.claims.flatMap(c => [c.text, '', `${sectionTitle(c.title || c.sectionId)} — supporting source:`, `“${c.quote}”`, '']),
-    `Handbook: ${source.title}`, `Reviewed: ${reviewDate}`, `Source version: ${sourceVersion}`, '',
+    `Handbook: ${source.title}`, `${starter?'Prepared':'Reviewed'}: ${reviewDate}`, `Source version: ${sourceVersion}`, ...(source.url?[`Original guide: ${source.url}`,`Attribution: ${source.attribution}`,`License: ${source.license} (${source.licenseUrl})`,`Source checked: ${source.checkedAt}`,source.notice]:[]), '',
     'This downloaded copy does not update. Open the link for the current shared answer:', url, '',
   ].join('\n');
 }

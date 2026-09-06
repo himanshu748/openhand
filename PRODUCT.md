@@ -6,7 +6,7 @@
 web
 
 ## Users
-Volunteers explain a fictional scholarship handbook. Readers retrieve answers in English or Hindi. Visitors can try a clearly labelled demo reviewer role. Sponsors can reward reviewed contributions with Solana devnet test SOL. Hackathon judges evaluate this complete loop.
+First-time open-source contributors read or hear guidance from GitHub’s public Open Source Guides. Volunteers contribute explanations of those excerpts. The fictional scholarship remains a separate practice collection. Readers retrieve answers in English or Hindi. Visitors can try a clearly labelled demo reviewer role. Sponsors can reward reviewed contributions with Solana devnet test SOL. Hackathon judges evaluate this complete loop.
 
 ## Product Purpose
 Turn one volunteer explanation into a source-linked answer that another person can read or hear. The user approved this product direction and all four integrations in the existing project conversation.
@@ -15,7 +15,7 @@ Turn one volunteer explanation into a source-linked answer that another person c
 Existing Express and browser JavaScript app deployed on Vercel. Keep /, /app, /ledger and existing public API contracts. Gemini checks contributions and generates follow-ups. ElevenLabs transcribes consented recordings and speaks guidance. Snowflake stores shared reviewed answers and computes language-specific gaps. Solana verifies contribution-linked finalized test payments.
 
 ## Capabilities and Constraints
-Fictional Asha Learning Grant; no actual applications or cash. Demo reviewers are not independently authenticated. Preserve consent, source version and signed proof validation, microphone limits, editable transcripts, session persistence, and payment safeguards. Design changes must not alter the source catalog or invalidate existing answers. Never imply guaranteed accuracy, real-world adoption, or a guaranteed contest win.
+Fictional Asha Learning Grant; no actual applications or cash. Demo reviewers are not independently authenticated. Preserve consent, source version and signed proof validation, microphone limits, editable transcripts, session persistence, and payment safeguards. The practice catalog and its source hash remain unchanged. New real collections use separate source versions and browser storage. Never imply guaranteed accuracy, real-world adoption, or a guaranteed contest win.
 
 ## Brand Commitments
 Pass It On name. Plain readable type; the user has repeatedly rejected decorative section typography. The user requests a substantial visual improvement while preserving working integrations. Build directly in code, using generated imagery only if materially useful.

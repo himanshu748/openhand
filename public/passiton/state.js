@@ -1,12 +1,15 @@
 import {initialMode} from './labels.js';
-export const KEY='passiton-demo-v1';
+import {collectionFromSearch} from './collections.js';
+export const COLLECTION=collectionFromSearch(globalThis.location?.search||'');
+export const API_PREFIX=COLLECTION==='practice'?'/api/passiton':'/api/passiton/guides/open-source';
+export const KEY=COLLECTION==='practice'?'passiton-demo-v1':'passiton-open-source-v1';
 let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch{}
-export const state={catalog:null,mode:initialMode(saved),questionId:'provisional',language:'hi',records:{},requests:{},sessionToken:null,sourceVersion:null,...saved,busy:false,recording:false,shared:[],coverage:null,providers:{}};
+export const state={catalog:null,mode:initialMode(saved),questionId:COLLECTION==='practice'?'provisional':'oss-non-code',language:COLLECTION==='practice'?'hi':'en',records:{},requests:{},sessionToken:null,sourceVersion:null,...saved,busy:false,recording:false,shared:[],coverage:null,providers:{}};
 export const recordKey=()=>`${state.questionId}:${state.language}`;
 export const current=()=>state.records[recordKey()]||(state.records[recordKey()]={text:'',history:[]});
 export function save(){try{const {records,requests,sessionToken,questionId,language,sourceVersion,mode}=state;localStorage.setItem(KEY,JSON.stringify({records,requests,sessionToken,questionId,language,sourceVersion,mode}));}catch{}}
 export async function api(path,body,raw,retrySession=true){
-  const r=await fetch(`/api/passiton${path}`,{method:body===undefined?'GET':'POST',headers:{...(body===undefined?{}:{'content-type':raw||'application/json'}),...(state.sessionToken?{'X-Passiton-Session':state.sessionToken}:{})},...(body===undefined?{}:{body:raw?body:JSON.stringify(body)})});
+  const r=await fetch(`${API_PREFIX}${path}`,{method:body===undefined?'GET':'POST',headers:{...(body===undefined?{}:{'content-type':raw||'application/json'}),...(state.sessionToken?{'X-Passiton-Session':state.sessionToken}:{})},...(body===undefined?{}:{body:raw?body:JSON.stringify(body)})});
   let data;try{data=await r.json();}catch{throw new Error('The server returned an unreadable response. Your draft is preserved.');}
   if(r.status===401&&data.code==='SESSION_REQUIRED'&&retrySession&&path!=='/session'){
     const fresh=await api('/session',{},undefined,false);state.sessionToken=fresh.token;save();

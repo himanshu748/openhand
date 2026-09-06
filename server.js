@@ -1,5 +1,6 @@
 import express from 'express';
 import {createPassitonRouter} from './lib/passiton/routes.js';
+import * as openSourceGuide from './lib/passiton/open-source-guide.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -34,6 +35,7 @@ app.use('/api',(req,res,next)=>{
   }
   next();
 });
+app.use('/api/passiton/guides/open-source',createPassitonRouter({},openSourceGuide));
 app.use('/api/passiton',createPassitonRouter());
 app.get(['/', '/index.html'],(_req,res)=>res.sendFile(path.join(here,'public/index.html')));
 app.get(['/app', '/pass-it-on'],(_req,res)=>res.sendFile(path.join(here,'public/passiton/index.html')));
