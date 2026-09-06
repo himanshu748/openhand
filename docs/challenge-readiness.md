@@ -2,7 +2,7 @@
 
 ## Update, 6 September 2026
 
-The submission is published at https://dev.to/himanshu_748/pass-it-on-give-someone-an-answer-they-can-pass-on-lcf. The main app now uses an attributed public open-source guide; the fictional grant remains as Practice. See `reuse-verification.md` for the latest 40-test and hosted real-guide evidence. Gemini correction and Snowflake sharing passed. Prepared Hindi audio played, but newly reviewed-answer audio failed twice and remains unresolved. Independent participant testing and authenticated reviewers remain outstanding.
+The submission is published at https://dev.to/himanshu_748/pass-it-on-give-someone-an-answer-they-can-pass-on-lcf. The main app now uses an attributed public open-source guide; the fictional grant remains as Practice. See `reuse-verification.md` for the latest 40-test and hosted real-guide evidence. Gemini correction and Snowflake sharing passed. Prepared and reviewed Hindi audio both played. An exhausted key allowance was resolved by raising its cap to 10,000 credits per refresh period with owner approval. Independent participant testing and authenticated reviewers remain outstanding.
 
 ## Historical preparation notes, 5 September 2026
 

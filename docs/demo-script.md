@@ -14,7 +14,7 @@ Use the public open-source guide and its supplied examples. Keep provider respon
 | 72–82s | Coverage table, matching question and language | “Snowflake also compares question requests with reviewed answers, so a volunteer can see where an explanation is missing.” |
 | 82–90s | Existing devnet receipt with memo visible | “A sponsor can fund an approved contribution. This earlier practice-collection receipt links a test payment to its contribution. It uses valueless devnet SOL.” |
 
-Current voice limitation: the 6 September real-guide pass played a prepared Hindi answer, but generation for the newly reviewed answer failed twice. Resolve and verify that failure before recording a successful voice segment.
+The 6 September real-guide pass played both the prepared and reviewed Hindi answers. The key cap was raised to 10,000 credits per refresh period with owner approval after two failures at the earlier limit. Check available credits before recording.
 
 The project owner has confirmed device recording works. For a spoken-interview video, show consent, capture, the editable transcript, and follow-up. Extend the video rather than squeezing that into an unreadable montage. The recorded audit evidence separately covers generated-audio transcription and live answer playback.
 
