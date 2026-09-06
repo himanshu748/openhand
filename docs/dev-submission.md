@@ -12,29 +12,31 @@ Pass It On lets you donate an explanation. Speak or type what a handbook means, 
 
 I built this around giving knowledge and time. A useful explanation should remain available when the next person asks the same question. The source needs to travel with it, too.
 
-The public demo uses a fictional scholarship handbook. Its clearest example is a student asking, “Can I apply before my final results?” A volunteer explains the rule, Gemini checks it, and a person compares the resulting claims with the handbook. The next visitor can open that answer directly in English or Hindi. ElevenLabs reads it aloud. A downloadable copy keeps the answer and its supporting quotes together.
+The first collection helps someone make their first open-source contribution. It uses selected excerpts from GitHub’s [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/), with attribution, a pinned revision, and the CC BY 4.0 license. It covers three questions: whether you need to write code, what to check before starting, and how to prepare a pull request.
 
-My proposed first pilot is a student club or volunteer group answering repeated questions about one of its guides. The live demo does not yet accept a group's own handbook, and I have not measured adoption. The contribution, correction, shared retrieval, speech, and devnet payment flows are implemented.
+You can read a prepared answer in English or Hindi as soon as you arrive, open its supporting excerpt, hear it through ElevenLabs, and save a copy with the source attached. Prepared answers are labelled as Pass It On adaptations. They do not count as community reviews. A volunteer can then contribute an explanation, correct it with Gemini, and leave a source-linked answer for the next visitor.
+
+A student coding club could use this collection during an open-source introduction: a beginner reads or hears an answer, checks the source, and passes the link to a classmate. That is the use case I want to test with a group. I have verified the hosted workflow, but I have not measured adoption or observed an independent participant completing it.
 
 ## Demo
 
-[![Pass It On workspace showing an answer alongside its supporting handbook.](https://raw.githubusercontent.com/himanshu748/pass-it-on/main/docs/design/shared-answer-live.png)](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=hi)
+[![Pass It On workspace showing the real open-source guide and its attributed answer.](https://raw.githubusercontent.com/himanshu748/pass-it-on/main/docs/design/real-guide-live.png)](https://pass-it-on-himanshu.vercel.app/app?collection=open-source&question=oss-non-code&language=hi)
 
-[Read the shared Hindi answer](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=hi) · [Read it in English](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=en) · [Open the website](https://pass-it-on-himanshu.vercel.app/)
+[Read the shared Hindi answer](https://pass-it-on-himanshu.vercel.app/app?collection=open-source&question=oss-non-code&language=hi) · [Read the English starter answer](https://pass-it-on-himanshu.vercel.app/app?collection=open-source&question=oss-non-code&language=en) · [Open the website](https://pass-it-on-himanshu.vercel.app/)
 
-Start with the answer. Open a supporting excerpt, then select **Listen to this answer**. **Copy question link** sends the next reader to the same question and language. **Save answer** downloads the explanation, exact quotes, review date, source version, and return link for offline reading. The saved copy says that it does not update.
+Start with the answer. Open a supporting excerpt, then select **Listen to this answer**. **Copy question link** sends the next reader to the same question and language. **Save answer** downloads the explanation, exact quotes, review or preparation date, attribution, license, source version, and return link for offline reading. The saved copy says that it does not update.
 
-Then [try contributing](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=en&example=correction):
+Then [try contributing](https://pass-it-on-himanshu.vercel.app/app?collection=open-source&question=oss-non-code&language=en&example=correction):
 
-1. Check the deliberately incorrect example. It says students must wait for final results and gives the wrong deadline. Gemini should flag both claims and ask for a correction.
+1. Check the deliberately incorrect example. It says only programmers can contribute and documentation does not count. Gemini should identify the contradiction and ask for a correction.
 2. Use the corrected example and check again. Open **Review**, compare the claims with the quoted source, and complete both acknowledgements.
 3. Return to **Questions**. Pass its link to a separate browser session and retrieve the shared answer there.
 
 You can also start a spoken interview: hear the question, consent to recording, speak your response, and edit the transcript before continuing. ElevenLabs handles transcription and speech; Gemini checks the explanation and writes the follow-up.
 
-The sponsor step works on Solana devnet. [This finalized transfer paid 0.001 test SOL](https://explorer.solana.com/tx/5dufRyjkreVxLzKd9dqJpSuSmiHooLVyq2MmWUXHSN9PH9zckCGCWD5AkoDsPXFX7AG3BFnGu6pkQDeVP4pgcftX?cluster=devnet) to the demo contributor. Its memo identifies the approved contribution. Test SOL has no monetary value. People can contribute and reuse answers whether or not a sponsor pays the bounty.
+The sponsor step works on Solana devnet. The earlier fictional-grant practice flow supplied the payment evidence: [This finalized transfer paid 0.001 test SOL](https://explorer.solana.com/tx/5dufRyjkreVxLzKd9dqJpSuSmiHooLVyq2MmWUXHSN9PH9zckCGCWD5AkoDsPXFX7AG3BFnGu6pkQDeVP4pgcftX?cluster=devnet) to the demo contributor. Its memo identifies the approved contribution. Test SOL has no monetary value. People can contribute and reuse answers whether or not a sponsor pays the bounty.
 
-The handbook is fictional. Visitors can try the clearly labelled demo reviewer role; that is not independently authenticated review or a real scholarship service.
+The fictional scholarship handbook remains in a separate **Practice** collection for rehearsing corrections. Its answers and payment evidence are kept separate from the real guide. Visitors can try a clearly labelled demo reviewer role in either collection; it is not independently authenticated review. The real guide is general advice, so the target project’s own contribution instructions still matter.
 
 ## Code
 
@@ -57,9 +59,9 @@ I kept the source check and human review separate. The server rejects quotes tha
 
 The next reader's experience drove the latest changes. First visits open on available answers. A direct link selects the question and language. Saved handouts carry their source and limitations. Shared links contain no session, review, or payment credentials. Hindi answer text and English source excerpts have separate language labels for assistive technology.
 
-The test suite covers proof tampering and expiry, review gates, provider failures, exact payment matching, and the sharing/export boundaries. Live checks separately exercised Gemini, Snowflake retrieval, and Hindi audio playback. The project owner confirmed microphone recording; the earlier automated transcription check used generated sample audio.
+All 40 tests pass. The test suite covers collection isolation, prepared-answer attribution, proof tampering and expiry, review gates, provider failures, exact payment matching, and the sharing/export boundaries. On the hosted real-guide collection, Gemini rejected the incorrect example, accepted the correction, and returned Hindi claims with source excerpts. The demo review saved the answer to Snowflake; a separate request retrieved it without the contributor’s session. ElevenLabs played the prepared Hindi answer. A later request to voice the newly reviewed answer failed twice; the app kept its text readable. That audio failure remains unresolved. These checks were agent-operated, not independent user research. The project owner confirmed microphone recording; the earlier automated transcription check used generated sample audio.
 
-A real group pilot still needs its own source collection, authenticated reviewers, correction and removal tools, and durable abuse controls. The current bounty uses a fixed devnet recipient and a direct transfer; it is not escrow and does not guarantee exactly-once payment across simultaneous sponsors. The next useful test is one group, one real guide, and a second person finding an answer without the original volunteer present.
+Before opening community review to a real group, I need authenticated reviewers, correction and removal tools, and durable abuse controls. Adding a group’s own handbook is also still future work. The current bounty uses a fixed devnet recipient and a direct transfer; it is not escrow and does not guarantee exactly-once payment across simultaneous sponsors. The next useful test is a coding club trying this real guide, with a second person finding an answer without the original volunteer present.
 
 ## Prize Categories
 

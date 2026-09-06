@@ -1,4 +1,12 @@
-# Challenge readiness, 5 September 2026
+# Challenge readiness
+
+## Update, 6 September 2026
+
+The submission is published at https://dev.to/himanshu_748/pass-it-on-give-someone-an-answer-they-can-pass-on-lcf. The main app now uses an attributed public open-source guide; the fictional grant remains as Practice. See `reuse-verification.md` for the latest 40-test and hosted real-guide evidence. Gemini correction and Snowflake sharing passed. Prepared Hindi audio played, but newly reviewed-answer audio failed twice and remains unresolved. Independent participant testing and authenticated reviewers remain outstanding.
+
+## Historical preparation notes, 5 September 2026
+
+The following section records the state before publication and the real-guide update. Its unpublished-draft and fictional-only descriptions are historical.
 
 Pass It On has a working demo and an unpublished submission draft. Winning is uncertain. Its strongest demonstrated result is a corrected, reviewed explanation that another session can retrieve and hear without a wallet.
 

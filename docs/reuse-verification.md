@@ -1,5 +1,22 @@
 # Answer reuse verification
 
+## Real-guide production pass, 6 September 2026
+
+Implementation `5555d65` makes an attributed, pinned selection from GitHub Open Source Guides the default collection. All 40 tests pass, including source isolation, starter-answer attribution, and proof boundaries.
+
+- Production returned the real source catalog and six Snowflake coverage rows, initially all zero. Prepared answers were not counted as reviews.
+- The incorrect non-code contribution example produced a Hindi correction request from Gemini and a saved Snowflake check. The corrected example produced two Hindi claims with exact excerpts and opened the review gate.
+- An agent compared those claims with the displayed source and exercised both demo-role acknowledgements. This is an agent-operated test, not independent human review. Snowflake coverage then reported one Hindi review for that question.
+- A separate HTTP client retrieved the stored answer without the contributing browser session. Another fresh session recorded a question request successfully in Snowflake. No contributor credentials were exposed in this verification.
+- ElevenLabs played the prepared Hindi answer: duration 11.099 seconds, actively playing, readyState 4. Generating speech for the reviewed answer then returned unavailable twice. The text remained readable. The ElevenLabs dashboard required sign-in, so the provider-side cause remains unverified.
+- The legacy practice catalog still returned its original source version and its stored Hindi answer. No new Solana payment was sent; the prior receipt belongs to the practice collection.
+- The save control displayed success, but this pass did not find the new file in Downloads. Handout content, attribution, and credential exclusion passed automated tests; a completed real-guide browser download is not claimed.
+
+`docs/design/real-guide-live.png` is an unedited production browser capture of the English prepared answer and its source on 6 September 2026. It contains public guide excerpts and no credentials.
+
+## Earlier practice-collection pass
+
+
 Verified 6 September 2026 against the production application at https://pass-it-on-himanshu.vercel.app, implementation commit `325c3db`.
 
 ## Automated checks
@@ -25,4 +42,4 @@ The earlier 6 September production pass separately exercised Gemini draft genera
 
 ## Limits
 
-The public collection still contains an authored fictional handbook. Review is a demo role, not authenticated independent review. A real group pilot needs a real source collection, authenticated reviewers, correction/removal tools and durable abuse controls. No adoption, number of people helped, independently measured user completion rate or competition result is claimed. The offline file is a static copy; its link retrieves the current shared answer.
+The earlier pass used an authored fictional handbook, now retained in the separate Practice collection. The main collection uses a real public guide. Review is a demo role, not authenticated independent review. A real group pilot still needs authenticated reviewers, correction/removal tools and durable abuse controls. No adoption, number of people helped, independently measured user completion rate or competition result is claimed. The offline file is a static copy; its link retrieves the current shared answer.

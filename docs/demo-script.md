@@ -2,17 +2,19 @@
 
 Target length: 90 seconds. This is a recording plan, not evidence that a video has been made.
 
-Use fictional example text throughout. Keep provider responses visible. Cut waiting time only with a visible cut; do not replace failed requests with success screens. Prepare a second browser session before recording. No wallet connection or new transaction is needed.
+Use the public open-source guide and its supplied examples. Keep provider responses visible. Cut waiting time only with a visible cut; do not replace failed requests with success screens. Prepare a second browser session before recording. No wallet connection or new transaction is needed.
 
 | Time | Show | Say |
 | --- | --- | --- |
-| 0–10s | Questions, provisional applications, Hindi; then Contribute | “Pass It On lets a volunteer leave an explanation that the next person can read or hear. This is a fictional scholarship handbook.” |
-| 10–28s | Incorrect example; Check contribution; both faults and source | “This answer gives the wrong requirement and deadline. Gemini compares it with the handbook and asks for a correction. The source is beside the answer.” |
+| 0–10s | Questions, open-source collection, Hindi; then Contribute | “Pass It On lets a volunteer leave an explanation that the next person can read or hear. This collection uses an attributed public guide from GitHub.” |
+| 10–28s | Incorrect example; Check contribution; contradiction and source | “This answer wrongly says only programmers can contribute. Gemini compares it with the handbook and asks for a correction. The source is beside the answer.” |
 | 28–43s | Corrected example; successful check; source excerpts | “The corrected answer has supporting quotes. The server checks that those quotes occur in the handbook. A person still needs to check what they mean.” |
 | 43–56s | Review; disabled approval; both acknowledgements; successful sharing | “I’m trying the labelled demo reviewer role. After checking the claims, I approve the answer and share it through Snowflake.” |
 | 56–72s | Copy question link; open it in a separate session; shared Hindi answer; Listen | “The shared link opens this question in Hindi. Another person can read it, hear it through ElevenLabs, or save it with the source.” Pause narration for several seconds so viewers hear the answer. |
 | 72–82s | Coverage table, matching question and language | “Snowflake also compares question requests with reviewed answers, so a volunteer can see where an explanation is missing.” |
-| 82–90s | Existing devnet receipt with memo visible | “A sponsor can fund an approved contribution. This receipt links a test payment to its contribution. It uses valueless devnet SOL.” |
+| 82–90s | Existing devnet receipt with memo visible | “A sponsor can fund an approved contribution. This earlier practice-collection receipt links a test payment to its contribution. It uses valueless devnet SOL.” |
+
+Current voice limitation: the 6 September real-guide pass played a prepared Hindi answer, but generation for the newly reviewed answer failed twice. Resolve and verify that failure before recording a successful voice segment.
 
 The project owner has confirmed device recording works. For a spoken-interview video, show consent, capture, the editable transcript, and follow-up. Extend the video rather than squeezing that into an unreadable montage. The recorded audit evidence separately covers generated-audio transcription and live answer playback.
 
