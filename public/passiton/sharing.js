@@ -15,7 +15,9 @@ export function entryFromLink(search, catalog) {
   const language = params.get('language');
   const question = catalog.questions.find(q => q.id === questionId);
   if (!question) return null;
-  return {questionId, language: Object.hasOwn(catalog.languages, language) ? language : question.language, mode: 'ask'};
+  const view = params.get('view');
+  const mode = ['ask', 'contribute', 'review', 'fund'].includes(view) ? view : 'ask';
+  return {questionId, language: Object.hasOwn(catalog.languages, language) ? language : question.language, mode};
 }
 
 export function answerHandout({question, language, languageName, answer, source, sourceVersion, url}) {

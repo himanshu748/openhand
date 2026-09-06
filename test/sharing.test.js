@@ -34,3 +34,8 @@ test('offline answers retain Hindi, exact evidence, demo status and staleness no
   assert.ok(content.includes('does not update'));
   assert.ok(!content.includes('private-session') && !content.includes('private-proof'));
 });
+
+test('explicit view links resume navigation but cannot introduce an action', () => {
+  assert.equal(entryFromLink('?question=documents&view=review', {questions,languages}).mode, 'review');
+  assert.equal(entryFromLink('?question=documents&view=approve', {questions,languages}).mode, 'ask');
+});
