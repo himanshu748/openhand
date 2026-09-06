@@ -16,3 +16,7 @@ The built learning studio uses question selection at left, an active task in the
 Keep existing consent, editable transcripts, microphone limits, source version checks, demo role disclosures and payment safeguards. No new product decisions remain in this design pass.
 
 Evidence: finish reviewer reported SHIP; 32 existing tests passed. Review screenshots `desktop.png`, `mobile.png`, `user-792.png` and `dark.png` under `.impeccable/review/` show initial viewports only. Regex detector fallback supplies no computed contrast proof or complete interaction verification.
+
+## Answer reuse
+
+Shared reviewed answers include Copy question link and Save answer beside voice playback. Public links select question/language and enter reading mode without changing stored contributions. UTF-8 handouts keep source excerpts, demo status, review date and source version. Clipboard denial opens a labelled, selectable link in a native dialog.

@@ -2,7 +2,7 @@
 
 Pass It On lets a volunteer leave an explanation that the next person can read or hear. Contribute by text or voice, correct the answer against a source, try the demo reviewer role, and share the approved answer through Snowflake. The knowledge flow works without a wallet; a sponsor can optionally fund a fixed Solana devnet bounty.
 
-[Try the app](https://pass-it-on-himanshu.vercel.app/app) · [DEV submission draft](docs/dev-submission.md) · [90-second demo script](docs/demo-script.md) · [Readiness and remaining gaps](docs/challenge-readiness.md)
+[Try the app](https://pass-it-on-himanshu.vercel.app/app) · [DEV submission](https://dev.to/himanshu_748/pass-it-on-give-someone-an-answer-they-can-pass-on-lcf) · [90-second demo script](docs/demo-script.md) · [Readiness and remaining gaps](docs/challenge-readiness.md)
 
 This replaces Openhand’s original donation-ledger front page. The earlier ledger is still available at `/ledger`; its implementation history is in [docs/ledger-history.md](docs/ledger-history.md).
 
@@ -17,6 +17,12 @@ The Asha Learning Grant handbook is **fictional, authored demo material**. There
 5. In **Funding**, a sponsor using Phantom signs a fixed **0.001 devnet SOL** transfer to the dedicated demo contributor. The transaction includes the contribution hash in its memo. The app records the signature before submission and only marks paid after finalized chain verification of signer, sender, recipient, amount, and memo.
 
 The payment is a direct transfer, not escrow. No wallet private key is deployed. Test SOL has no monetary value. Payment does not establish answer correctness.
+
+## Pass an answer to someone else
+
+A shared question link opens the right question and language in Questions, even when a returning reader last used another stage. For example: [read the shared Hindi answer](https://pass-it-on-himanshu.vercel.app/app?question=provisional&language=hi). The link contains no session, review or payment token.
+
+Use **Copy question link** to pass the current shared answer on. **Save answer** downloads a UTF-8 text handout containing the claims, exact source excerpts, review date, source version, demo-role notice and return link. It works offline after downloading; saved copies do not update. Neither control publishes private drafts or grants review/payment permission.
 
 ## What each technology does
 

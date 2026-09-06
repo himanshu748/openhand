@@ -1,6 +1,7 @@
 import {state,current,recordKey,save,api,$,notice,storageNotice,esc} from './state.js';
 import {render,renderStatus,renderCoverage,renderIntegrations} from './views.js';
 import {sectionTitle} from './labels.js';
+import {questionLink,entryFromLink,answerHandout} from './sharing.js';
 let recorder,stream,recordTimer,recordingKey;
 const sample={
  provisional:{wrong:'Students must wait for their final results before applying. The final results deadline is 15 October 2026.',correct:'Students awaiting final results can apply with their latest available marksheet. They must upload their final results by 30 September 2026.'},
@@ -32,6 +33,18 @@ async function play(kind,token,target,extra={}){const d=await api('/speak',{kind
 }
 async function ask(){const r=current();r.studentQuestion=$('studentQuestion').value;const d=await api('/ask',{questionId:state.questionId,language:state.language,question:r.studentQuestion});r.draft=d.result;r.answerToken=d.answerToken;state.providers.gemini='live';state.requests[recordKey()]=true;save();render();await refreshCoverage();notice('Source-linked draft generated. This answer has not been reviewed by a person. '+storageNotice(d.storage));}
 async function approve(){const r=current();const d=await api('/review',{checkToken:r.checkToken,confirmedSource:$('confirmedSource')?.checked===true,confirmedDemo:$('confirmedDemo')?.checked===true});r.review=d.review;r.reviewToken=d.reviewToken;save();render();await refreshCoverage();notice('Contribution approved in the demo reviewer role. '+storageNotice(d.storage));}
+function sharedAnswer(){return state.shared[0]?.answer;}
+async function copyQuestionLink(){
+  const url=questionLink(location.origin,state.questionId,state.language);
+  try{await navigator.clipboard.writeText(url);notice('Link copied. It opens this question and language, with the latest shared answer.');}
+  catch{$('shareURL').value=url;$('shareDialog').showModal();$('shareURL').select();}
+}
+function downloadAnswer(){
+  const answer=sharedAnswer();if(!answer)throw new Error('Load a shared reviewed answer before downloading it.');
+  const content=answerHandout({question:state.catalog.questions.find(q=>q.id===state.questionId),language:state.language,languageName:state.catalog.languages[state.language],answer,source:state.catalog.source,sourceVersion:state.catalog.sourceVersion,url:questionLink(location.origin,state.questionId,state.language)});
+  const url=URL.createObjectURL(new Blob(['\uFEFF',content],{type:'text/plain;charset=utf-8'}));
+  const a=document.createElement('a');a.href=url;a.download=`pass-it-on-${state.questionId}-${state.language}.txt`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notice('Answer saved with its source, review status and a link back. The downloaded copy does not update.');
+}
 function exportRecord(){const r=current();const data={product:'Pass It On',fictional:true,network:'devnet',question:state.catalog.questions.find(q=>q.id===state.questionId),language:state.language,source:state.catalog.source,sourceVersion:state.catalog.sourceVersion,contribution:r.text,checks:r.history,assessment:r.result,review:r.review,payment:r.payment||null,limits:'Demo reviewer role, not independently authenticated. Exact source excerpts are checked by code; semantic correctness requires human review. Test SOL has no monetary value.'};const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`passiton-${state.questionId}-${state.language}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notice('Evidence exported with source, review, and payment state.');}
 const rpc=async(method,params)=>{const r=await fetch('/api/rpc',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({method,params})});const d=await r.json();if(d.error)throw new Error(d.error.message||d.error);return d.result;};
 async function verifyPending(){const r=current();if(!r.pending)throw new Error('No pending payment to verify.');const d=await api('/payment/verify',{signature:r.pending.signature,intentToken:r.pending.intentToken});r.payment=d.payment;delete r.pending;state.providers.solana='live · finalized';save();render();notice('Finalized devnet payment verified against this contribution’s memo. '+storageNotice(d.storage));}
@@ -59,6 +72,7 @@ async function startRecording(){if(!current().voiceConsent){$('voiceDialog').sho
   recorder.start();recordTimer=setTimeout(()=>{if(recorder?.state==='recording')recorder.stop();},45000);
 }
 const handlers={
+ share:copyQuestionLink,downloadAnswer:()=>{try{downloadAnswer();}catch(e){notice(e.message,true);}},
  check:()=>task(checkContribution,'Checking contribution…'),ask:()=>task(ask,'Reading the source…'),request:()=>task(requestQuestion,'Recording the knowledge gap…'),approve:()=>task(approve,'Recording your review…'),pay:()=>task(pay,'Preparing a devnet bounty…'),verifyPayment:()=>task(verifyPending,'Checking finalized payment…'),
  listenFollowup:()=>task(()=>play('check',current().checkToken,'feedbackAudio'),'Creating spoken follow-up…'),listenDraft:()=>task(()=>play('draft',current().answerToken,'draftAudio'),'Creating spoken draft…'),listenReviewed:()=>task(async()=>{await loadShared();const shared=state.shared[0];await play(shared?'reading':'review',shared?.readingToken||current().reviewToken,'answerAudio');},'Creating spoken answer…'),
  goAsk:()=>{setMode('ask');loadShared();},goContribute:()=>setMode('contribute'),goReview:()=>setMode('review'),goFund:()=>setMode('fund'),source:()=>$('sourceDialog').showModal(),export:exportRecord,
@@ -67,10 +81,13 @@ const handlers={
 };
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.action==='stopRecord'){handlers.stopRecord();return;}if(state.busy||state.recording)return;if(b.dataset.mode){setMode(b.dataset.mode);if(b.dataset.mode==='ask')loadShared();}else if(b.dataset.question){selectQuestion(b.dataset.question,b.dataset.language);if(b.closest('table'))$('workspace').scrollIntoView({behavior:'smooth'});}else if(b.dataset.action)handlers[b.dataset.action]?.();});
 document.addEventListener('input',e=>{if(e.target.id==='studentQuestion'){current().studentQuestion=e.target.value;save();}if(e.target.id==='contributionText'){edit(e.target.value);$('answerStatus').textContent='Draft edited · Check again';const feedback=$('interaction').querySelector('.feedback');if(feedback)feedback.remove();}if(['confirmedSource','confirmedDemo'].includes(e.target.id)){const b=document.querySelector('[data-action="approve"]');if(b)b.disabled=!$('confirmedSource')?.checked||!$('confirmedDemo')?.checked;}if(e.target.id==='fundConsent'){const b=document.querySelector('[data-action="pay"]');if(b)b.disabled=!e.target.checked;}if(e.target.id==='voiceConsent')$('beginVoice').disabled=!e.target.checked;});
+$('closeShare').onclick=()=>$('shareDialog').close();
 $('mobileQuestion').addEventListener('change',()=>selectQuestion($('mobileQuestion').value));
 $('syncKnowledge').onclick=()=>task(syncKnowledge,'Syncing local requests and approved answers…');
 $('language').addEventListener('change',()=>selectQuestion(state.questionId,$('language').value));$('openSource').onclick=()=>$('sourceDialog').showModal();$('closeSource').onclick=()=>$('sourceDialog').close();$('cancelVoice').onclick=()=>$('voiceDialog').close();$('beginVoice').onclick=beginInterview;$('viewCoverage').onclick=()=>$('coverageSection').scrollIntoView({behavior:'smooth'});$('refreshCoverage').onclick=()=>task(async()=>{await refreshCoverage();notice('Coverage refreshed.');},'Refreshing coverage…');$('exportRecord').onclick=exportRecord;
 window.addEventListener('pagehide',()=>{clearTimeout(recordTimer);stream?.getTracks().forEach(t=>t.stop());});
 async function init(){try{state.catalog=await api('/catalog');if(state.sourceVersion&&state.sourceVersion!==state.catalog.sourceVersion){state.records={};state.requests={};notice('The handbook changed. Previous approvals were cleared so new answers are checked against the current source.');}state.sourceVersion=state.catalog.sourceVersion;if(!state.catalog.questions.some(q=>q.id===state.questionId))state.questionId='provisional';if(!state.catalog.languages[state.language])state.language='hi';if(!state.sessionToken)state.sessionToken=(await api('/session',{})).token;if(new URLSearchParams(location.search).get('example')==='correction'&&!current().text){edit(sample[state.questionId].wrong);notice('This example has two deliberate mistakes. Run the source check to find them.');}
+  const entry=entryFromLink(location.search,state.catalog);if(entry)Object.assign(state,entry);
+  if(new URLSearchParams(location.search).get('example')==='correction')state.mode='contribute';
   save();render();$('allSources').innerHTML=state.catalog.source.sections.map(s=>`<section class="source-section" id="${s.id}"><h3>${esc(sectionTitle(s.title))}</h3><p>${esc(s.text)}</p></section>`).join('')+`<p class="muted">Source version ${esc(state.sourceVersion.slice(0,16))}</p>`;await Promise.allSettled([refreshCoverage(),loadShared(),api('/coverage/sql').then(d=>{$('coverageSQL').textContent=d.sql;})]);}catch(e){notice(e.message,true);}}
 init();
